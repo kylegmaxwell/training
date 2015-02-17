@@ -47,7 +47,7 @@ class NaryTree : public UnitTest
 public:
     NaryTree();
 
-    virtual bool test();
+    virtual TestResult test();
 
 private:
 

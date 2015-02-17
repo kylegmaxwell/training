@@ -20,11 +20,11 @@ void TestSuite::test()
     for (auto itr = mTests.begin(); itr != mTests.end(); itr++) {
 
         UnitTest *t = *itr;
-        if (!t->test()) {
+        if (t->test()==UnitTest::FAIL) {
             cout << "X";
             failures++;
         }
-        else {
+        else { // pass
             cout << ".";
         }
         count++;

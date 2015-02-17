@@ -10,7 +10,7 @@ public:
 
     int computeParity(int value);
 
-    virtual bool test();
+    virtual TestResult test();
 };
 
 #endif // COMPUTEPARITY_H

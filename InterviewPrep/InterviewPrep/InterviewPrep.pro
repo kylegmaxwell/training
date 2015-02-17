@@ -19,10 +19,12 @@ SOURCES += main.cpp \
     computeparity.cpp \
     unittest.cpp \
     testsuite.cpp \
-    narytree.cpp
+    narytree.cpp \
+    convertbase.cpp
 
 HEADERS += \
     computeparity.h \
     testsuite.h \
     unittest.h \
-    narytree.h
+    narytree.h \
+    convertbase.h

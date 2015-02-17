@@ -4,7 +4,7 @@ UnitTest::UnitTest(bool iVerbose) : mVerbose(iVerbose)
 {
 }
 
-bool UnitTest::test()
+UnitTest::TestResult UnitTest::test()
 {
-    return true;
+    return PASS;
 }

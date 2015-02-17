@@ -36,7 +36,7 @@ int ComputeParity::computeParity(int value) {
         return 1;
 }
 
-bool ComputeParity::test()
+UnitTest::TestResult ComputeParity::test()
 {
     if (verbose())
         cout << "ComputeParity running test" << endl;
@@ -46,7 +46,7 @@ bool ComputeParity::test()
     for (int i=0;i<10;i++) {
         int parity = computeParity(i);
         if (parity != expectedResult[i])
-            return false;
+            return FAIL;
     }
-    return true;
+    return PASS;
 }

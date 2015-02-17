@@ -6,7 +6,7 @@ NaryTree::NaryTree()
 {
 }
 
-bool NaryTree::test()
+UnitTest::TestResult NaryTree::test()
 {
     string expectedResult = "A B C D E F G \n";
     Tree tree;
@@ -16,7 +16,10 @@ bool NaryTree::test()
     tree.print(ss);
 
     string result = ss.str();
-    return result.compare(expectedResult)==0;
+    if (result.compare(expectedResult)==0)
+        return PASS;
+    else
+        return FAIL;
 }
 
 /* Structure
