@@ -4,21 +4,17 @@
 
 using namespace std;
 
-
-
-Queens::Queens() : UnitTest(true), mSet(), mCount(0)
+Queens::Queens() : UnitTest(false), mSet(), mCount(0)
 {
 }
 
 UnitTest::TestResult Queens::test()
 {
-
-
     // board size =>           0,1,2,3,4, 5,6, 7, 8,  9, 10
     int expectedSolutions[] = {1,1,0,0,2,10,4,40,92,352,724};
 
     //! Run the queens algorithm for each size
-    for (int i = 0; i < 11; i++) {
+    for (int i = 0; i <= 8; i++) {
         mSet.clear();
         mCount = 0;
 
@@ -64,7 +60,7 @@ bool Queens::placeQueens(Board &b, int nQueens)
 {
     // base case for solved board
     if (nQueens == 0) {
-        saveBoard(b);
+        saveBoard(b, false);
         return true;
     }
 
@@ -238,7 +234,6 @@ void Board::placeQueen(int row, int col)
     int r0 = row - pMin;
     int c0 = col - pMin;
 
-
     while (r0 < mSize && c0 < mSize ) {
         setState(r0,c0,ATTACKED);
         r0++;
@@ -260,8 +255,6 @@ void Board::placeQueen(int row, int col)
         r0++;
         c0--;
     }
-
-
 }
 
 int Board::getNumEmpty()
