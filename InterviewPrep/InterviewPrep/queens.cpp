@@ -1,123 +1,162 @@
+#include <algorithm>
+
 #include "queens.h"
 
 using namespace std;
 
-Queens::Queens()
+
+
+Queens::Queens() : UnitTest(true), mSet(), mCount(0)
 {
 }
 
 UnitTest::TestResult Queens::test()
 {
-    for (int i = 0; i < 10; i++) {
+
+
+    // board size =>           0,1,2,3,4, 5,6, 7, 8,  9, 10
+    int expectedSolutions[] = {1,1,0,0,2,10,4,40,92,352,724};
+
+    //! Run the queens algorithm for each size
+    for (int i = 0; i < 11; i++) {
         mSet.clear();
+        mCount = 0;
+
+        // Run the problem
         Board b(i);
         placeQueens(b, i);
-        cout << "Number of "<< i << " solutions " << mSet.size() << endl;
+
+        // Output results
+        int solutions = mSet.size();
+        if (mVerbose)
+            cout << "Board size "<< i << " has " << solutions << " solutions of " << mCount << " attempts." << endl;
+
+        // Report any errors
+        if (solutions != expectedSolutions[i])
+            return FAIL;
     }
 
-//    Number of 0 solutions 1
-//    Number of 1 solutions 1
-//    Number of 2 solutions 0
-//    Number of 3 solutions 0
-//    Number of 4 solutions 2
-//    Number of 5 solutions 10
-//    Number of 6 solutions 4
-//    Number of 7 solutions 40
-//    Number of 8 solutions 92
-
-    return FAIL;
+    return PASS;
 }
 
-void Queens::saveBoard(Board &b)
+void Queens::saveBoard(Board &b, bool debug)
 {
     stringstream ss;
-    b.print(ss);
+    if (debug)
+        b.printFull(ss);
+    else
+        b.printQueens(ss);
     string result = ss.str();
+
+    // record the attempt
+    mCount++;
+
+    // Save the solution if it is unique and new
     if (mSet.find(result)== mSet.end()) {
         mSet.insert(result);
-        //cout << result;
+
+        if (debug)
+            cout << result;
     }
 }
 
 bool Queens::placeQueens(Board &b, int nQueens)
 {
+    // base case for solved board
     if (nQueens == 0) {
         saveBoard(b);
         return true;
     }
 
     int numEmpty = b.getNumEmpty();
-
-    if (numEmpty < nQueens)
+    // Placement of queens is not possible
+    if (numEmpty < nQueens) {
+        mCount++; // record attempt
         return false;
+    }
 
     bool foundPlacement = false;
+
+    // optimization
+    int maxSize = nQueens; // dont process repeat solutions
+    if (numEmpty > maxSize)
+        numEmpty = maxSize;
+
     // try every possible move
     for (int i=0; i<numEmpty; i++) {
 
+        // Copy the board so the recursive call will not overwrite parent's data
         Board bCopy = b;
         if (placeQueensHelper(bCopy, nQueens, i))
             foundPlacement = true;
 
     }
     return foundPlacement;
-    //return false;
 }
 
 bool Queens::placeQueensHelper(Board &b, int nQueens, int offset)
 {
+    // base case for solved board
     if (nQueens == 0) {
         saveBoard(b);
         return true;
     }
 
+    // Copy the board so the recursive call will not overwrite parent's data
     Board bCopy = b;
+
+    // Find the nth next empty cell
     int row, col;
     if (bCopy.findEmpty(row, col, offset)) {
         bCopy.placeQueen(row, col);
-        //bool foundPlacement = false;
-        //int numEmpty = bCopy.getNumEmpty();
-        //cout << numEmpty << endl;
-        //for (int i = 0; i < numEmpty; i++) {
-        //    if (placeQueensHelper(bCopy, nQueens-1, 0))
-        //        foundPlacement = true;
-        //}
-        //return foundPlacement;
 
+        // Solve the problem with one fewer queen to place
         return placeQueens(bCopy, nQueens-1);
-        //return placeQueensHelper(bCopy, nQueens-1,0);
     }
-    else {
-        return false;
-    }
+
+    return false;
 }
 
 Board::Board(int size) : mSize(size),
     mEntries(size*size, EMPTY),
-    mNumEmpty(size*size)
+    mNumEmpty(size*size),
+    mQueens()
 {
-    //cout << mEntries.size() << endl;
 }
 
 void Board::setState(int row, int col, Board::TileState state)
 {
     TileState oldState = getState(row, col);
+    // Never overwrite queen
     if (oldState == QUEEN)
         return;
-    if ((state == QUEEN || state == ATTACKED) && (oldState == EMPTY))
+
+    // An empty tile is filled
+    if ((state == QUEEN || state == ATTACKED) && (oldState == EMPTY)) {
         mNumEmpty--;
+    }
+
+    // A new queen has been placed, record it
+    if (state == QUEEN && oldState != QUEEN)
+        mQueens.push_back(row * mSize + col);
+
+    // Set the actual value in the array, convert from two to one dimensional indexing
     mEntries[row * mSize + col] = state;
 }
 
 Board::TileState Board::getState(int row, int col)
 {
+    // return the entry after converting from 2D to 1D indexing
     return mEntries[row * mSize + col];
 }
 
-void Board::print(std::ostream &stream)
+void Board::printFull(std::ostream &stream)
 {
+    // Iterate over entire board
     for (int r = 0; r < mSize; r++) {
         for (int c = 0; c < mSize; c++) {
+
+            // Select the appropriate character for the square
             switch(getState(r,c)) {
             case QUEEN: {
                 stream << "Q";
@@ -140,11 +179,28 @@ void Board::print(std::ostream &stream)
     stream << endl;
 }
 
+void Board::printQueens(std::ostream &stream) {
+
+    // Sort so that equivalent solutions compare equal as strings
+    std::sort(mQueens.begin(), mQueens.end());
+
+    // Write out the queens placement as a string
+    for (auto itr = mQueens.begin(); itr != mQueens.end(); itr++) {
+        int index = *itr;
+        stream << index << " ";
+    }
+    stream << endl;
+}
+
 bool Board::findEmpty(int &row, int &col, int offset)
 {
     for (int r = 0; r < mSize; r++) {
         for (int c = 0; c < mSize; c++) {
+
+            // check if an empty cell has been found
             if (getState(r,c) == EMPTY ) {
+
+                // Check whether to select this empty cell
                 if (offset == 0) {
                     row = r;
                     col = c;
@@ -161,25 +217,22 @@ bool Board::findEmpty(int &row, int &col, int offset)
 
 void Board::placeQueen(int row, int col)
 {
-
+    // setState will not overwrite cells set to Queen
     setState(row, col, QUEEN);
 
     // rook
 
     // attack row
     for (int r = 0; r < mSize; r++) {
-        //if (r != row)
-            setState(r, col, ATTACKED);
+        setState(r, col, ATTACKED);
     }
     // attack col
     for (int c = 0; c < mSize; c++) {
-        //if (c != col)
-            setState(row, c, ATTACKED);
+        setState(row, c, ATTACKED);
     }
 
     // bishop
 
-    //if (row >= col) {
     // first diagonal
     int pMin = std::min<int>(row,col);
     int r0 = row - pMin;
@@ -214,4 +267,9 @@ void Board::placeQueen(int row, int col)
 int Board::getNumEmpty()
 {
     return mNumEmpty;
+}
+
+int Board::getSize()
+{
+    return mSize;
 }
