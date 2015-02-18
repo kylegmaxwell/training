@@ -20,11 +20,13 @@ SOURCES += main.cpp \
     unittest.cpp \
     testsuite.cpp \
     narytree.cpp \
-    convertbase.cpp
+    convertbase.cpp \
+    queens.cpp
 
 HEADERS += \
     computeparity.h \
     testsuite.h \
     unittest.h \
     narytree.h \
-    convertbase.h
+    convertbase.h \
+    queens.h

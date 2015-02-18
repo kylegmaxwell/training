@@ -6,6 +6,7 @@
 #include "testsuite.h"
 #include "narytree.h"
 #include "convertbase.h"
+#include "queens.h"
 
 using namespace std;
 
@@ -22,8 +23,13 @@ int main(int argc, char *argv[])
     NaryTree tree;
     tests.addTest(&tree);
 
+    // Test 3
     ConvertBase base;
     tests.addTest(&base);
+
+    // Test 4
+    Queens queens;
+    tests.addTest(&queens);
 
     // Run Tests
     tests.test();
