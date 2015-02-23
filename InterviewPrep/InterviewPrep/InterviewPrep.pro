@@ -21,7 +21,9 @@ SOURCES += main.cpp \
     testsuite.cpp \
     narytree.cpp \
     convertbase.cpp \
-    queens.cpp
+    queens.cpp \
+    listcycle.cpp \
+    pairsum.cpp
 
 HEADERS += \
     computeparity.h \
@@ -29,4 +31,6 @@ HEADERS += \
     unittest.h \
     narytree.h \
     convertbase.h \
-    queens.h
+    queens.h \
+    listcycle.h \
+    pairsum.h

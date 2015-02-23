@@ -7,11 +7,11 @@
 #include <vector>
 #include <sstream>
 
-class Node
+class TreeNode
 {
 public:
 
-    Node(char iData);
+    TreeNode(char iData);
 
     // recursive print
     void print(std::iostream &stream);
@@ -21,12 +21,12 @@ public:
 
     char getData();
 
-    void addChild(Node *node);
+    void addChild(TreeNode *node);
 
 private:
     char mData;
 
-    std::vector<Node*> mChildren;
+    std::vector<TreeNode*> mChildren;
 };
 
 class Tree
@@ -34,7 +34,7 @@ class Tree
 public:
     Tree();
 
-    Node *mRootNode;
+    TreeNode *mRootNode;
 
     void buildTree();
 

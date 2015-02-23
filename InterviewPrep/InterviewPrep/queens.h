@@ -4,8 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
-#include <set>
-#include <map>
+#include <unordered_set>
+#include <unordered_map>
 
 #include "unittest.h"
 /*!
@@ -111,7 +111,7 @@ public:
 private:
 
     //! set of working solutions, used to remove exact duplicates
-    std::set<std::string> mSet;
+    std::unordered_set<std::string> mSet;
 
     //! Total number of completed boards tested, either successful or failed
     int mCount;

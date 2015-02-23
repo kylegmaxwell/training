@@ -14,7 +14,7 @@ UnitTest::TestResult Queens::test()
     int expectedSolutions[] = {1,1,0,0,2,10,4,40,92,352,724};
 
     //! Run the queens algorithm for each size
-    for (int i = 0; i <= 8; i++) {
+    for (int i = 0; i <= 7; i++) {
         mSet.clear();
         mCount = 0;
 

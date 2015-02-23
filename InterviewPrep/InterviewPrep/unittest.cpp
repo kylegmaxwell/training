@@ -6,5 +6,5 @@ UnitTest::UnitTest(bool iVerbose) : mVerbose(iVerbose)
 
 UnitTest::TestResult UnitTest::test()
 {
-    return PASS;
+    return FAIL;
 }

@@ -40,19 +40,19 @@ Tree::Tree()
 
 void Tree::buildTree()
 {
-    Node *g = new Node('G');
-    Node *d = new Node('D');
+    TreeNode *g = new TreeNode('G');
+    TreeNode *d = new TreeNode('D');
     d->addChild(g);
 
-    Node *f = new Node('F');
-    Node *e = new Node('E');
-    Node *c = new Node('C');
+    TreeNode *f = new TreeNode('F');
+    TreeNode *e = new TreeNode('E');
+    TreeNode *c = new TreeNode('C');
     c->addChild(e);
     c->addChild(f);
 
-    Node *b = new Node('B');
+    TreeNode *b = new TreeNode('B');
 
-    Node *a = new Node('A');
+    TreeNode *a = new TreeNode('A');
 
     a->addChild(b);
     a->addChild(c);
@@ -68,12 +68,12 @@ void Tree::print(iostream &stream)
     stream << endl;
 }
 
-Node::Node(char iData)
+TreeNode::TreeNode(char iData)
 {
     mData = iData;
 }
 
-void Node::print(iostream &stream)
+void TreeNode::print(iostream &stream)
 {
     // base case
     if (mChildren.size()==0)
@@ -81,28 +81,28 @@ void Node::print(iostream &stream)
 
     // print children
     for (auto itr = mChildren.begin(); itr != mChildren.end(); itr++) {
-        Node *node = *itr;
+        TreeNode *node = *itr;
         node->printData(stream);
     }
 
     // call children
     for (auto itr = mChildren.begin(); itr != mChildren.end(); itr++) {
-        Node *node = *itr;
+        TreeNode *node = *itr;
         node->print(stream);
     }
 }
 
-void Node::printData(iostream &stream)
+void TreeNode::printData(iostream &stream)
 {
     stream << mData << " ";
 }
 
-char Node::getData()
+char TreeNode::getData()
 {
     return mData;
 }
 
-void Node::addChild(Node *node)
+void TreeNode::addChild(TreeNode *node)
 {
     mChildren.push_back(node);
 }

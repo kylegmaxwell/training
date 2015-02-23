@@ -7,6 +7,8 @@
 #include "narytree.h"
 #include "convertbase.h"
 #include "queens.h"
+#include "listcycle.h"
+#include "pairsum.h"
 
 using namespace std;
 
@@ -30,6 +32,14 @@ int main(int argc, char *argv[])
     // Test 4
     Queens queens;
     tests.addTest(&queens);
+
+    // Test 5
+    ListCycle cycle;
+    tests.addTest(&cycle);
+
+    // Test 6
+    PairSum pair;
+    tests.addTest(&pair);
 
     // Run Tests
     tests.test();
