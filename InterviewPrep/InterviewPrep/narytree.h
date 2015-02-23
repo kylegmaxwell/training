@@ -5,6 +5,9 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
+#include <stack>
+
 #include <sstream>
 
 class TreeNode
@@ -23,23 +26,20 @@ public:
 
     void addChild(TreeNode *node);
 
-private:
-    char mData;
-
     std::vector<TreeNode*> mChildren;
+
+private:
+
+    char mData;
 };
 
-class Tree
-{
-public:
-    Tree();
+//class Tree
+//{
+//public:
+//    Tree();
 
-    TreeNode *mRootNode;
 
-    void buildTree();
-
-    void print(std::iostream &stream);
-};
+//};
 
 
 class NaryTree : public UnitTest
@@ -50,6 +50,31 @@ public:
     virtual TestResult test();
 
 private:
+    TreeNode *mRootNode;
+
+    void buildTree();
+
+    /*!
+     * \brief printBFS Print in Breadth First Search order using a queue
+     * \param stream Output buffer for text
+     */
+    void printBFS(std::iostream &stream);
+
+    /*!
+     * \brief printDFS Print in Depth First Search order using a stack
+     * \param stream Output buffer for text
+     */
+    void printDFS(std::iostream &stream);
+
+    /*!
+     * \brief printDFSRecursive Print in Depth First Search order using recursion
+     * \param stream Output buffer for text
+     */
+    void printDFSRecursive(std::iostream &stream);
+    void printDFSHelper(std::iostream &stream, TreeNode *n);
+
+
+    //void printBroken(std::iostream &stream);
 
 
 };

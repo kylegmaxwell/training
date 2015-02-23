@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     convertbase.cpp \
     queens.cpp \
     listcycle.cpp \
-    pairsum.cpp
+    pairsum.cpp \
+    maxstack.cpp
 
 HEADERS += \
     computeparity.h \
@@ -33,4 +34,5 @@ HEADERS += \
     convertbase.h \
     queens.h \
     listcycle.h \
-    pairsum.h
+    pairsum.h \
+    maxstack.h

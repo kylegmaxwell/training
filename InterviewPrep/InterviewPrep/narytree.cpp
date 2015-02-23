@@ -1,71 +1,164 @@
+#include <unordered_map>
+
 #include "narytree.h"
 
 using namespace std;
 
-NaryTree::NaryTree()
+NaryTree::NaryTree() : UnitTest(false)
 {
 }
 
 UnitTest::TestResult NaryTree::test()
 {
-    string expectedResult = "A B C D E F G \n";
-    Tree tree;
-    tree.buildTree();
+    buildTree();
 
-    stringstream ss;
-    tree.print(ss);
 
-    string result = ss.str();
-    if (result.compare(expectedResult)==0)
-        return PASS;
-    else
-        return FAIL;
+    // Breadth First Search
+    {
+        string expectedResult = "A B C D E F G H I J K L M N ";
+        stringstream ss;
+        printBFS(ss);
+
+        string result = ss.str();
+        if (mVerbose){
+            cout << result << endl;
+        }
+        if (!stringEqual(result, expectedResult))
+            return FAIL;
+    }
+
+    // Depth First Search
+    {
+        string expectedResult = "A B E K F G C H I L M D J N ";
+        stringstream ss;
+        printDFS(ss);
+
+        string result = ss.str();
+        if (mVerbose){
+            cout << result << endl;
+        }
+        if (!stringEqual(result, expectedResult))
+            return FAIL;
+    }
+
+    // Depth First Search Recursive
+    {
+        string expectedResult = "A B E K F G C H I L M D J N ";
+        stringstream ss;
+        printDFSRecursive(ss);
+
+        string result = ss.str();
+        if (mVerbose){
+            cout << result << endl;
+        }
+        if (!stringEqual(result, expectedResult))
+            return FAIL;
+    }
+
+    return PASS;
 }
 
 /* Structure
  *
- *         A
- * -----------------
- * |      |        |
- * B      C        D
- *     ------      |
- *     |    |      G
- *     E    F
+ *             A
+ *    -------------------
+ *    |        |        |
+ *    B        C        D
+ *  ----    ------      |
+ *  | | |  |      |     |
+ *  E F G  H      I     J
+ *  |           ----    |
+ *  |           |  |    |
+ *  K           L  M    N
  *
 */
-Tree::Tree()
+void NaryTree::buildTree()
 {
+    unordered_map<char,TreeNode*> nodeMap;
 
+    for (char c = 'A'; c <= 'N'; c++) {
+        nodeMap[c] = new TreeNode(c);
+    }
+
+    TreeNode *a = nodeMap['A'];
+    a->addChild(nodeMap['B']);
+    a->addChild(nodeMap['C']);
+    a->addChild(nodeMap['D']);
+
+    TreeNode *b = nodeMap['B'];
+    b->addChild(nodeMap['E']);
+    b->addChild(nodeMap['F']);
+    b->addChild(nodeMap['G']);
+
+    TreeNode *e = nodeMap['E'];
+    e->addChild(nodeMap['K']);
+
+    TreeNode *c = nodeMap['C'];
+    c->addChild(nodeMap['H']);
+    c->addChild(nodeMap['I']);
+
+    TreeNode *i = nodeMap['I'];
+    i->addChild(nodeMap['L']);
+    i->addChild(nodeMap['M']);
+
+    TreeNode *d = nodeMap['D'];
+    d->addChild(nodeMap['J']);
+
+    TreeNode *j = nodeMap['J'];
+    j->addChild(nodeMap['N']);
+
+    mRootNode = nodeMap['A'];
 }
 
-void Tree::buildTree()
+void NaryTree::printBFS(iostream &stream)
 {
-    TreeNode *g = new TreeNode('G');
-    TreeNode *d = new TreeNode('D');
-    d->addChild(g);
+    queue<TreeNode*> nodeQueue;
+    nodeQueue.push(mRootNode);
 
-    TreeNode *f = new TreeNode('F');
-    TreeNode *e = new TreeNode('E');
-    TreeNode *c = new TreeNode('C');
-    c->addChild(e);
-    c->addChild(f);
+    while (!nodeQueue.empty()) {
+        // get the next element and pop it
+        TreeNode *n = nodeQueue.front();
+        nodeQueue.pop();
 
-    TreeNode *b = new TreeNode('B');
+        // add children to queue
+        for (auto itr = n->mChildren.begin(); itr != n->mChildren.end(); itr++)
+            nodeQueue.push(*itr);
 
-    TreeNode *a = new TreeNode('A');
-
-    a->addChild(b);
-    a->addChild(c);
-    a->addChild(d);
-
-    mRootNode = a;
+        stream << n->getData() << " ";
+    }
 }
 
-void Tree::print(iostream &stream)
+void NaryTree::printDFS(iostream &stream)
 {
-    mRootNode->printData(stream);
-    mRootNode->print(stream);
-    stream << endl;
+    stack<TreeNode*> nodeStack;
+    nodeStack.push(mRootNode);
+
+    while (!nodeStack.empty()) {
+        // get the next element and pop it
+        TreeNode *n = nodeStack.top();
+        nodeStack.pop();
+
+        stream << n->getData() << " ";
+
+        // add children to queue in reverse order
+        for (auto itr = n->mChildren.rbegin(); itr != n->mChildren.rend(); itr++)
+            nodeStack.push(*itr);
+    }
+}
+
+void NaryTree::printDFSRecursive(iostream &stream)
+{
+    printDFSHelper(stream, mRootNode);
+}
+
+void NaryTree::printDFSHelper(iostream &stream, TreeNode *n)
+{
+    stream << n->getData() << " ";
+
+    for (auto itr = n->mChildren.begin(); itr != n->mChildren.end(); itr++) {
+        TreeNode *c = *itr;
+        printDFSHelper(stream, c);
+    }
 }
 
 TreeNode::TreeNode(char iData)
@@ -73,24 +166,6 @@ TreeNode::TreeNode(char iData)
     mData = iData;
 }
 
-void TreeNode::print(iostream &stream)
-{
-    // base case
-    if (mChildren.size()==0)
-        return;
-
-    // print children
-    for (auto itr = mChildren.begin(); itr != mChildren.end(); itr++) {
-        TreeNode *node = *itr;
-        node->printData(stream);
-    }
-
-    // call children
-    for (auto itr = mChildren.begin(); itr != mChildren.end(); itr++) {
-        TreeNode *node = *itr;
-        node->print(stream);
-    }
-}
 
 void TreeNode::printData(iostream &stream)
 {

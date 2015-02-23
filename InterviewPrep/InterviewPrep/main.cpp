@@ -9,6 +9,7 @@
 #include "queens.h"
 #include "listcycle.h"
 #include "pairsum.h"
+#include "maxstack.h"
 
 using namespace std;
 
@@ -40,6 +41,10 @@ int main(int argc, char *argv[])
     // Test 6
     PairSum pair;
     tests.addTest(&pair);
+
+    // Test 7
+    MaxStack stack;
+    tests.addTest(&stack);
 
     // Run Tests
     tests.test();
