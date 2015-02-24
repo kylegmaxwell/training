@@ -10,6 +10,7 @@
 #include "listcycle.h"
 #include "pairsum.h"
 #include "maxstack.h"
+#include "binarytree.h"
 
 using namespace std;
 
@@ -45,6 +46,10 @@ int main(int argc, char *argv[])
     // Test 7
     MaxStack stack;
     tests.addTest(&stack);
+
+    // Test 8
+    BinaryTree binary;
+    tests.addTest(&binary);
 
     // Run Tests
     tests.test();

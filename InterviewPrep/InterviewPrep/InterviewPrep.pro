@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     queens.cpp \
     listcycle.cpp \
     pairsum.cpp \
-    maxstack.cpp
+    maxstack.cpp \
+    binarytree.cpp
 
 HEADERS += \
     computeparity.h \
@@ -35,4 +36,5 @@ HEADERS += \
     queens.h \
     listcycle.h \
     pairsum.h \
-    maxstack.h
+    maxstack.h \
+    binarytree.h
