@@ -8,17 +8,17 @@ using namespace std;
 BinaryTree::BinaryTree() : UnitTest(true)
 {}
 
-BinaryNode *BinaryTree::buildBalancedTree()
+BinaryNodePtr BinaryTree::buildBalancedTree()
 {
-    BinaryNode *b = new BinaryNode(2);
-    BinaryNode *c = new BinaryNode(3);
-    BinaryNode *d = new BinaryNode(4);
-    BinaryNode *e = new BinaryNode(5);
-    BinaryNode *f = new BinaryNode(6);
-    BinaryNode *g = new BinaryNode(7);
-    BinaryNode *h = new BinaryNode(8);
-    BinaryNode *i = new BinaryNode(9);
-    BinaryNode *j = new BinaryNode(10);
+    BinaryNodePtr b(new BinaryNode(2));
+    BinaryNodePtr c(new BinaryNode(3));
+    BinaryNodePtr d(new BinaryNode(4));
+    BinaryNodePtr e(new BinaryNode(5));
+    BinaryNodePtr f(new BinaryNode(6));
+    BinaryNodePtr g(new BinaryNode(7));
+    BinaryNodePtr h(new BinaryNode(8));
+    BinaryNodePtr i(new BinaryNode(9));
+    BinaryNodePtr j(new BinaryNode(10));
 
     b->mLeft = c;
     b->mRight = h;
@@ -32,17 +32,15 @@ BinaryNode *BinaryTree::buildBalancedTree()
     return b;
 }
 
-BinaryNode *BinaryTree::buildUnbalancedTree()
+BinaryNodePtr BinaryTree::buildUnbalancedTree()
 {
-    // TODO try using shared_ptr for memory management
-    //BinaryNode *root = nullptr;
-    BinaryNode *b = new BinaryNode(6);
-    BinaryNode *c = new BinaryNode(271);
-    BinaryNode *d = new BinaryNode(28);
-    BinaryNode *e = new BinaryNode(0);
-    BinaryNode *f = new BinaryNode(561);
-    BinaryNode *g = new BinaryNode(3);
-    BinaryNode *h = new BinaryNode(17);
+    BinaryNodePtr b(new BinaryNode(6));
+    BinaryNodePtr c(new BinaryNode(271));
+    BinaryNodePtr d(new BinaryNode(28));
+    BinaryNodePtr e(new BinaryNode(0));
+    BinaryNodePtr f(new BinaryNode(561));
+    BinaryNodePtr g(new BinaryNode(3));
+    BinaryNodePtr h(new BinaryNode(17));
 
     b->mLeft = c;
     b->mRight = f;
@@ -54,16 +52,16 @@ BinaryNode *BinaryTree::buildUnbalancedTree()
     return b;
 }
 
-bool BinaryTree::isBalanced(BinaryNode *node)
+bool BinaryTree::isBalanced(BinaryNodePtr node)
 {
     int d = 0;
-    if (node != nullptr)
+    if (node)
         return isBalancedHelper(node, d);
     else
         return false;
 }
 
-bool BinaryTree::isBalancedHelper(BinaryNode *node, int &depth)
+bool BinaryTree::isBalancedHelper(BinaryNodePtr node, int &depth)
 {
     int leftDepth = depth;
     int rightDepth = depth;
@@ -89,12 +87,12 @@ bool BinaryTree::isBalancedHelper(BinaryNode *node, int &depth)
 
 UnitTest::TestResult BinaryTree::test()
 {
-    BinaryNode *treeGood = buildBalancedTree();
+    BinaryNodePtr treeGood = buildBalancedTree();
 
     if (!isBalanced(treeGood))
         return FAIL;
 
-    BinaryNode *treeBad = buildUnbalancedTree();
+    BinaryNodePtr treeBad = buildUnbalancedTree();
     if (isBalanced(treeBad))
         return FAIL;
 
@@ -104,8 +102,14 @@ UnitTest::TestResult BinaryTree::test()
 
 BinaryNode::BinaryNode(int iData)
     : mData(iData), mLeft(nullptr), mRight(nullptr)
-{}
+{
+}
 
 BinaryNode::BinaryNode(int iData, BinaryNode *iLeft, BinaryNode *iRight)
     : mData(iData), mLeft(iLeft), mRight(iRight)
-{}
+{
+}
+
+BinaryNode::~BinaryNode()
+{
+}

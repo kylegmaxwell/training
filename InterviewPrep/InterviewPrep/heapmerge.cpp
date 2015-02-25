@@ -29,7 +29,7 @@ void HeapMerge::fillArray(DataVector &v)
 UnitTest::TestResult HeapMerge::test()
 {
     // collection of all the files
-    vector<DataVector*> files;
+    vector<DataVectorPtr> files;
 
      // offset into the vector for each file, used to keep track of what has been processed
     vector<int> offsets;
@@ -43,7 +43,7 @@ UnitTest::TestResult HeapMerge::test()
     for (int i = 0; i < NumFiles; i++) {
 
         // create the file
-        DataVector* tmpFile = new DataVector(); // TODO clean up dynamic allocation
+        DataVectorPtr tmpFile(new DataVector()); // TODO clean up dynamic allocation
         files.push_back(tmpFile);
         fillArray(*tmpFile);
 
@@ -72,7 +72,7 @@ UnitTest::TestResult HeapMerge::test()
 
         // get the file associated with the record
         int index = ip.second;
-        DataVector *file = files[index];
+        DataVectorPtr file = files[index];
 
         // get the position of the next record to process in the file
         int offset = offsets[index];

@@ -7,6 +7,7 @@
 #include <cstdlib> // rand
 #include <algorithm>
 #include <unordered_map>
+#include <memory>
 
 /*!
  * \brief The HeapMerge class solves the problem of merging sorted lists.
@@ -31,6 +32,7 @@ public:
 
     //! File containing a list of data records
     typedef std::vector<DataType> DataVector;
+    typedef std::shared_ptr<DataVector> DataVectorPtr;
 
     // Constructor
     HeapMerge();
