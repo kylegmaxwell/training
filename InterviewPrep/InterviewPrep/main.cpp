@@ -11,6 +11,7 @@
 #include "pairsum.h"
 #include "maxstack.h"
 #include "binarytree.h"
+#include "heapmerge.h"
 
 using namespace std;
 
@@ -50,6 +51,10 @@ int main(int argc, char *argv[])
     // Test 8
     BinaryTree binary;
     tests.addTest(&binary);
+
+    // Test 9
+    HeapMerge heap;
+    tests.addTest(&heap);
 
     // Run Tests
     tests.test();
