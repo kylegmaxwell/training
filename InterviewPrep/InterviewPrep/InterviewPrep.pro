@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     pairsum.cpp \
     maxstack.cpp \
     binarytree.cpp \
-    heapmerge.cpp
+    heapmerge.cpp \
+    binarysearch.cpp
 
 HEADERS += \
     computeparity.h \
@@ -39,4 +40,5 @@ HEADERS += \
     pairsum.h \
     maxstack.h \
     binarytree.h \
-    heapmerge.h
+    heapmerge.h \
+    binarysearch.h

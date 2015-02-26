@@ -12,6 +12,7 @@
 #include "maxstack.h"
 #include "binarytree.h"
 #include "heapmerge.h"
+#include "binarysearch.h"
 
 using namespace std;
 
@@ -55,6 +56,10 @@ int main(int argc, char *argv[])
     // Test 9
     HeapMerge heap;
     tests.addTest(&heap);
+
+    // Test 10
+    BinarySearch search;
+    tests.addTest(&search);
 
     // Run Tests
     tests.test();
