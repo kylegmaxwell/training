@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     maxstack.cpp \
     binarytree.cpp \
     heapmerge.cpp \
-    binarysearch.cpp
+    binarysearch.cpp \
+    hashletter.cpp
 
 HEADERS += \
     computeparity.h \
@@ -41,4 +42,5 @@ HEADERS += \
     maxstack.h \
     binarytree.h \
     heapmerge.h \
-    binarysearch.h
+    binarysearch.h \
+    hashletter.h

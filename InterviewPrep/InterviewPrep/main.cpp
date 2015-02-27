@@ -13,6 +13,7 @@
 #include "binarytree.h"
 #include "heapmerge.h"
 #include "binarysearch.h"
+#include "hashletter.h"
 
 using namespace std;
 
@@ -60,6 +61,10 @@ int main(int argc, char *argv[])
     // Test 10
     BinarySearch search;
     tests.addTest(&search);
+
+    // Test 10
+    HashLetter hash;
+    tests.addTest(&hash);
 
     // Run Tests
     tests.test();

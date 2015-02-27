@@ -36,6 +36,13 @@ public:
     bool isBalanced(BinaryNodePtr node);
     bool isBalancedHelper(BinaryNodePtr node, int &depth);
 
+    //! Check if the ordering of the nodes is violated during traversal
+    bool processNode(BinaryNodePtr n, int &prev);
+
+    //! Check if the tree is a sorted Binary Search Tree.
+    bool isSorted(BinaryNodePtr node);
+    bool isSortedRecursive(BinaryNodePtr node, int &prev);
+
     virtual TestResult test();
 };
 
