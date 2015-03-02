@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     binarytree.cpp \
     heapmerge.cpp \
     binarysearch.cpp \
-    hashletter.cpp
+    hashletter.cpp \
+    powerset.cpp
 
 HEADERS += \
     computeparity.h \
@@ -43,4 +44,5 @@ HEADERS += \
     binarytree.h \
     heapmerge.h \
     binarysearch.h \
-    hashletter.h
+    hashletter.h \
+    powerset.h

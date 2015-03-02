@@ -14,6 +14,7 @@
 #include "heapmerge.h"
 #include "binarysearch.h"
 #include "hashletter.h"
+#include "powerset.h"
 
 using namespace std;
 
@@ -65,6 +66,10 @@ int main(int argc, char *argv[])
     // Test 10
     HashLetter hash;
     tests.addTest(&hash);
+
+    // Test 10
+    PowerSet set;
+    tests.addTest(&set);
 
     // Run Tests
     tests.test();
