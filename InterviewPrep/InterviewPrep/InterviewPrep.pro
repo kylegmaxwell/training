@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     heapmerge.cpp \
     binarysearch.cpp \
     hashletter.cpp \
-    powerset.cpp
+    powerset.cpp \
+    dynamicprogramming.cpp
 
 HEADERS += \
     computeparity.h \
@@ -45,4 +46,5 @@ HEADERS += \
     heapmerge.h \
     binarysearch.h \
     hashletter.h \
-    powerset.h
+    powerset.h \
+    dynamicprogramming.h

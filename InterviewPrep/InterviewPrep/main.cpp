@@ -15,6 +15,7 @@
 #include "binarysearch.h"
 #include "hashletter.h"
 #include "powerset.h"
+#include "dynamicprogramming.h"
 
 using namespace std;
 
@@ -63,13 +64,17 @@ int main(int argc, char *argv[])
     BinarySearch search;
     tests.addTest(&search);
 
-    // Test 10
+    // Test 11
     HashLetter hash;
     tests.addTest(&hash);
 
-    // Test 10
+    // Test 12
     PowerSet set;
     tests.addTest(&set);
+
+    // Test 13
+    DynamicProgramming dyno;
+    tests.addTest(&dyno);
 
     // Run Tests
     tests.test();
