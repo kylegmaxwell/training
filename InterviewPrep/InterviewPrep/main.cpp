@@ -16,6 +16,7 @@
 #include "hashletter.h"
 #include "powerset.h"
 #include "dynamicprogramming.h"
+#include "sorting.h"
 
 using namespace std;
 
@@ -75,6 +76,10 @@ int main(int argc, char *argv[])
     // Test 13
     DynamicProgramming dyno;
     tests.addTest(&dyno);
+
+    // Test 14
+    Sorting sorting;
+    tests.addTest(&sorting);
 
     // Run Tests
     tests.test();

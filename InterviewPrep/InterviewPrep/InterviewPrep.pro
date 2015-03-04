@@ -30,7 +30,8 @@ SOURCES += main.cpp \
     binarysearch.cpp \
     hashletter.cpp \
     powerset.cpp \
-    dynamicprogramming.cpp
+    dynamicprogramming.cpp \
+    sorting.cpp
 
 HEADERS += \
     computeparity.h \
@@ -47,4 +48,5 @@ HEADERS += \
     binarysearch.h \
     hashletter.h \
     powerset.h \
-    dynamicprogramming.h
+    dynamicprogramming.h \
+    sorting.h
