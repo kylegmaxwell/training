@@ -19,7 +19,7 @@ public:
      * \return The index, or -1 if not found.
      */
     template <typename T>
-    int search(std::vector<T> values, T value);
+    static int search(std::vector<T> &values, T value);
 
     /*!
      * \brief Search for the leftmost index of the given value.
@@ -27,7 +27,7 @@ public:
      * \return The index, or -1 if not found.
      */
     template <typename T>
-    int searchLeft(std::vector<T> values, size_t index);
+    int searchLeft(std::vector<T> &values, size_t index);
 
 };
 

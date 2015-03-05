@@ -1,5 +1,5 @@
-#ifndef SORT_H
-#define SORT_H
+#ifndef SORTING_H
+#define SORTING_H
 
 #include "unittest.h"
 
@@ -41,4 +41,4 @@ private:
     void mergeSort(IntVec &v, size_t L, size_t R);
 };
 
-#endif // SORT_H
+#endif // SORTING_H

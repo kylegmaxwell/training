@@ -38,7 +38,7 @@ UnitTest::TestResult BinarySearch::test()
 
     for (size_t i = 0; i < data.size(); i++) {
 
-        int index = search(data, data[i]);
+        int index = BinarySearch::search(data, data[i]);
         if (index == -1)
             return FAIL;
 
@@ -49,22 +49,22 @@ UnitTest::TestResult BinarySearch::test()
         }
     }
 
-    if (search(data, 0) != -1)
+    if (BinarySearch::search(data, 0) != -1)
         return FAIL;
 
     return PASS;
 }
 
 template <typename T>
-int BinarySearch::search(std::vector<T> values, T searchValue)
+static int BinarySearch::search(std::vector<T> &values, T searchValue)
 {
     if (values.empty())
         return -1;
 
-    size_t left = 0;
-    size_t right = values.size()-1;
+    int left = 0;
+    int right = values.size()-1;
     while (left <= right) {
-        size_t middle = left + (right - left) / 2;
+        int middle = left + (right - left) / 2;
 
         T arrayValue = values[middle];
         if (arrayValue == searchValue) {
@@ -82,7 +82,7 @@ int BinarySearch::search(std::vector<T> values, T searchValue)
 }
 
 template <typename T>
-int BinarySearch::searchLeft(std::vector<T> values, size_t index)
+int BinarySearch::searchLeft(std::vector<T> &values, size_t index)
 {
     // check for invalid
     if (index >= values.size())
