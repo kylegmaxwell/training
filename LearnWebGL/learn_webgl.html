@@ -90,6 +90,7 @@
         gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
     }
 
+    var cubeVerticesIndexBuffer;
     var squareVertexPositionBuffer;
     var squareVertexColorBuffer;
     var squareVertexNormalBuffer;
@@ -98,8 +99,6 @@
         
         //---- Position
         
-        squareVertexPositionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
         /* // box tube
         vertices = [
             1.0, 1.0, 0.0,
@@ -114,15 +113,69 @@
             0.0, 1.0, 0.0
         ];*/
         // box tube
-        vertices = [
-            1.0, 1.0, 0.0,
-            0.0, 1.0, 0.0,
-            1.0, 0.0, 0.0,
-            0.0, 0.0, 0.0,
+        var vertices = [
+            // Front face
+            -1.0, -1.0,  1.0,
+            1.0, -1.0,  1.0,
+            1.0,  1.0,  1.0,
+            -1.0,  1.0,  1.0,
+
+            // Back face
+            -1.0, -1.0, -1.0,
+            -1.0,  1.0, -1.0,
+            1.0,  1.0, -1.0,
+            1.0, -1.0, -1.0,
+
+            // Top face
+            -1.0,  1.0, -1.0,
+            -1.0,  1.0,  1.0,
+            1.0,  1.0,  1.0,
+            1.0,  1.0, -1.0,
+
+            // Bottom face
+            -1.0, -1.0, -1.0,
+            1.0, -1.0, -1.0,
+            1.0, -1.0,  1.0,
+            -1.0, -1.0,  1.0,
+            
+            // Right face
+             1.0, -1.0, -1.0,
+             1.0,  1.0, -1.0,
+             1.0,  1.0,  1.0,
+             1.0, -1.0,  1.0,
+
+            // Left face
+            -1.0, -1.0, -1.0,
+            -1.0, -1.0,  1.0,
+            -1.0,  1.0,  1.0,
+            -1.0,  1.0, -1.0
+            
         ];
+        
+        squareVertexPositionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+        
         squareVertexPositionBuffer.itemSize = 3;
         squareVertexPositionBuffer.numItems = vertices.length / squareVertexPositionBuffer.itemSize;
+        
+        //---- Topology 
+        
+        // This array specifies which vertices make up the triangles
+        var cubeVertexIndices = [
+        0,  1,  2,      0,  2,  3,    // front
+        4,  5,  6,      4,  6,  7,    // back
+        8,  9,  10,     8,  10, 11,   // top
+        12, 13, 14,     12, 14, 15,   // bottom
+        16, 17, 18,     16, 18, 19,   // right
+        20, 21, 22,     20, 22, 23    // left
+        ]
+    
+        // Now send the element array to GL
+        cubeVerticesIndexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
+        cubeVerticesIndexBuffer.numItems = cubeVertexIndices.length;
         
         var vertCount = squareVertexPositionBuffer.numItems;
         
@@ -139,13 +192,51 @@
         squareVertexColorBuffer.numItems = vertCount;
         
         //---- Normal
-        
-        squareVertexNormalBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexNormalBuffer);
+        /*
         normals = []
         for (var i=0; i < vertCount; i++) {
           normals = normals.concat([i==4, 0.0, 0.0]);
-        }
+        }*/
+        var normals = [
+            // Front face
+            0.0, 0.0,  1.0,
+            0.0, 0.0,  1.0,
+            0.0, 0.0,  1.0,
+            0.0, 0.0,  1.0,
+
+            // Back face
+            0.0, 0.0,  -1.0,
+            0.0, 0.0,  -1.0,
+            0.0, 0.0,  -1.0,
+            0.0, 0.0,  -1.0,
+
+            // Top face
+            0.0,  1.0, 0.0,
+            0.0,  1.0, 0.0,
+            0.0,  1.0, 0.0,
+            0.0,  1.0, 0.0,
+
+            // Bottom face
+            0.0,  -1.0, 0.0,
+            0.0,  -1.0, 0.0,
+            0.0,  -1.0, 0.0,
+            0.0,  -1.0, 0.0,
+            
+            // Right face
+             -1.0, 0.0, 0.0,
+             -1.0, 0.0, 0.0,
+             -1.0, 0.0, 0.0,
+             -1.0, 0.0, 0.0,
+
+            // Left face
+            1.0, 0.0, 0.0,
+            1.0, 0.0, 0.0,
+            1.0, 0.0, 0.0,
+            1.0, 0.0, 0.0
+            
+        ];
+        squareVertexNormalBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexNormalBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
         squareVertexNormalBuffer.itemSize = 3;
         squareVertexNormalBuffer.numItems = vertCount;
@@ -174,8 +265,24 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexNormalBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, squareVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
+        
         setMatrixUniforms();
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
+        //gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
+        gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+        //console.log(cubeVerticesIndexBuffer.numItems);
+        
+        mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
+        setMatrixUniforms();
+        gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+        
+        mat4.translate(mvMatrix, [0.0, 0.0, 2.0]);
+        setMatrixUniforms();
+        gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+        
+        mat4.translate(mvMatrix, [0.0, 2.0, -2.0]);
+        setMatrixUniforms();
+        gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
     }
 
 
