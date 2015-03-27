@@ -98,21 +98,7 @@
     function initBuffers() {
         
         //---- Position
-        
-        /* // box tube
-        vertices = [
-            1.0, 1.0, 0.0,
-            0.0, 1.0, 0.0,
-            1.0, 0.0, 0.0,
-            0.0, 0.0, 0.0,
-            1.0, 0.0, 1.0,
-            0.0, 0.0, 1.0,
-            1.0, 1.0, 1.0,
-            0.0, 1.0, 1.0,
-            1.0, 1.0, 0.0,
-            0.0, 1.0, 0.0
-        ];*/
-        // box tube
+        // box
         var vertices = [
             // Front face
             -1.0, -1.0,  1.0,
@@ -243,19 +229,22 @@
         
     }
 
-
+    var sceneRotate = 0;
+    
     function drawScene() {
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 10.0, pMatrix);
 
         mat4.identity(mvMatrix);
 
         mat4.translate(mvMatrix, [-1.5, -0.5, -7.0]);
         mat4.rotateX(mvMatrix, 0.4);
-        mat4.rotateY(mvMatrix, 1.1);
-
+        //mat4.rotateY(mvMatrix, 1.1);
+        mat4.rotateY(mvMatrix, sceneRotate);
+        sceneRotate += 0.5*deltaT;
+    
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
     
@@ -268,9 +257,8 @@
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
         
         setMatrixUniforms();
-        //gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
+        
         gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-        //console.log(cubeVerticesIndexBuffer.numItems);
         
         mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
         setMatrixUniforms();
@@ -285,7 +273,24 @@
         gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
     }
 
-
+    var deltaT = 0;
+    var prevT = 0;
+    function step() {
+        
+        var currT = new Date().getTime();
+        
+        if (prevT != 0) {
+            deltaT = currT - prevT;
+            deltaT *= 0.001; // convert ms to s
+        }
+        prevT = currT;
+        
+        //console.log("test" + deltaT);    
+        
+        drawScene();
+        
+        window.requestAnimationFrame(step);
+    }
 
     function webGLStart() {
         var canvas = document.getElementById("webgl-canvas");
@@ -297,6 +302,8 @@
         gl.enable(gl.DEPTH_TEST);
 
         drawScene();
+        
+        window.requestAnimationFrame(step);
     }
 
 
