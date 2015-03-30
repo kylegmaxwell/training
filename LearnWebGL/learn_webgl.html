@@ -43,7 +43,12 @@
     
         shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
         gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+        
+        shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+        gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
     
+        shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+        
         shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
     }
@@ -61,6 +66,7 @@
     var squareVertexPositionBuffer;
     var squareVertexColorBuffer;
     var squareVertexNormalBuffer;
+    var cubeVertexTextureCoordBuffer;
 
     function initBuffers() {
         
@@ -103,6 +109,29 @@
         squareVertexNormalBuffer.itemSize = 3;
         squareVertexNormalBuffer.numItems = vertCount;
         
+        //---- Texture
+        cubeVertexTextureCoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cubeTextureCoords), gl.STATIC_DRAW);
+        cubeVertexTextureCoordBuffer.itemSize = 2;
+        cubeVertexTextureCoordBuffer.numItems = cubeTextureCoords.length / cubeVertexTextureCoordBuffer.itemSize;
+    }
+    
+    var cubeTexture;
+    function initTexture() {
+        cubeTexture = gl.createTexture();
+        cubeTexture.image = new Image();
+        cubeTexture.image.onload = function() { handleLoadedTexture(cubeTexture); }
+    cubeTexture.image.src = "data/sunset-1.jpg";
+    }
+
+    function handleLoadedTexture(texture) {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.bindTexture(gl.TEXTURE_2D, null);
     }
 
     var sceneRotate = 0;
@@ -121,18 +150,33 @@
         mat4.rotateY(mvMatrix, sceneRotate);
         sceneRotate += 0.5*deltaT;
     
+        // position
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
     
+        // color
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, squareVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
+        //normals
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexNormalBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, squareVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
+        //texture
+        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
+        gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
+        gl.uniform1i(shaderProgram.samplerUniform, 0);
+
+        // topology
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
         
+        // transform
         setMatrixUniforms();
+        
+        // render
         
         gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
         
@@ -161,7 +205,7 @@
         }
         prevT = currT;
         
-        //console.log("test" + deltaT);    
+        //console.log("test" + deltaT);
         
         drawScene();
         
@@ -173,6 +217,7 @@
         initGL(canvas);
         initShaders();
         initBuffers();
+        initTexture();
 
         gl.clearColor(0.0, 0.0, 0.3, 1.0);
         gl.enable(gl.DEPTH_TEST);

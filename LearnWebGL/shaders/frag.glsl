@@ -4,6 +4,9 @@ varying vec4 vPosition;
 varying vec4 vColor;
 varying vec4 vNormal;
 varying float vDepth;
+varying vec2 vTextureCoord;
+
+uniform sampler2D uSampler;
 
 void main(void)
 {
@@ -26,6 +29,6 @@ void main(void)
     
     vec4 dColor = vec4(d,wave,0,1);
     
-    gl_FragColor = 0.5*dColor + 0.5*nColor;
-    
+    //gl_FragColor = 0.5*dColor + 0.5*nColor;
+    gl_FragColor += texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 }
