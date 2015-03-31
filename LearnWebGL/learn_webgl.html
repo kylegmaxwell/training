@@ -18,110 +18,43 @@
 <!-- Main Program --> 
 <script type="text/javascript">
 
-    var shaderProgram;
-
-    function initShaders() {
-        var fragmentShader = getShader(gl, "fragment",  './shaders/frag.glsl');
-        var vertexShader = getShader(gl, "vertex",  './shaders/vert.glsl');
-
-        shaderProgram = gl.createProgram();
-        gl.attachShader(shaderProgram, vertexShader);
-        gl.attachShader(shaderProgram, fragmentShader);
-        gl.linkProgram(shaderProgram);
-
-        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-        gl.useProgram(shaderProgram);
-
-        shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-        gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-
-        shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-        gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
     
-        shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
-        gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
-        
-        shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
-        gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
-    
-        shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
-        
-        shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-        shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-    }
-
-
     var mvMatrix = mat4.create();
     var pMatrix = mat4.create();
 
-    function setMatrixUniforms() {
-        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-    }
-
-    
     var cubeShape;
     var cubeRender;
     
     var quadShape;
     var quadRender;
     
-    function initBuffers() {
+    var rttN;
+    var rttD;
+    
+    // initialize the rendering contexts 
+    function init() {
+        //console.log("init")
         
         // create the model vertex data
         cubeShape = new Cube();
-        quadShape = new Quad();
         
         // create the opengl buffers
         cubeRender = new Renderable(cubeShape);
-        cubeRender.init();
+        cubeRender.initShaders('basic');
+        cubeRender.initBuffers();
         
+        quadShape = new Quad();
         quadRender = new Renderable(quadShape);
-        quadRender.init();
+        quadRender.initShaders('basic');
+        quadRender.initBuffers();
+        
+        rttN = new RenderToTexture(512);
+        rttN.initFrameBuffer();
+        
+        rttD = new RenderToTexture(512);
+        rttD.initFrameBuffer();
     }
     
-    var rttFramebuffer;
-    var rttTexture;
-    var rttSize;
-    function initFramebuffer() {
-    
-        // create frame buffer
-        rttFramebuffer = gl.createFramebuffer();
-        gl.bindFramebuffer(gl.FRAMEBUFFER, rttFramebuffer);
-        rttSize = 1024;
-        rttFramebuffer.width = rttSize;
-        rttFramebuffer.height = rttSize;
-        
-        // create empty texture target
-        rttTexture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, rttTexture);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-        // fill texture with empty pixels
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, rttFramebuffer.width, rttFramebuffer.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-
-        // create render buffer for depth
-        var renderbuffer = gl.createRenderbuffer();
-        gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
-        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, rttFramebuffer.width, rttFramebuffer.height);
-        
-        // attach depth and texture buffers to frame buffer
-        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, rttTexture, 0);
-        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuffer);
-
-        // clear
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        gl.bindRenderbuffer(gl.RENDERBUFFER, null);
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    
-    }
-  
     var cubeTexture;
     function initTexture() {
         cubeTexture = gl.createTexture();
@@ -136,6 +69,8 @@
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.generateMipmap(gl.TEXTURE_2D);
         
         gl.bindTexture(gl.TEXTURE_2D, null);
@@ -143,11 +78,12 @@
 
     var sceneRotate = 0;
     
-    function drawBaseScene() {
+    function drawBaseScene(mode) {
+        //console.log("drawBaseScene")
     
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.clearColor(0., 0., 0., 1.);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 20.0, pMatrix);
@@ -158,41 +94,43 @@
         mat4.rotateX(mvMatrix, 0.4);
         
         mat4.rotateY(mvMatrix, sceneRotate);
-        sceneRotate += 0.5*deltaT;
     
         //bind opengl buffers
-        cubeRender.bindBuffers(shaderProgram);
-        
+        cubeRender.bindBuffers();
+                
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
-        gl.uniform1i(shaderProgram.samplerUniform, 0);
+        
+        cubeRender.setFragUniforms(mode, dx, dy);
         
         // transform and draw
-        setMatrixUniforms();
+        cubeRender.setVertUniforms(pMatrix, mvMatrix);
         cubeRender.draw();
         
         mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
-        setMatrixUniforms();
+        cubeRender.setVertUniforms(pMatrix, mvMatrix);
         cubeRender.draw();
         
         mat4.translate(mvMatrix, [0.0, 0.0, 2.0]);
-        setMatrixUniforms();
+        cubeRender.setVertUniforms(pMatrix, mvMatrix);
         cubeRender.draw();
         
         mat4.translate(mvMatrix, [0.0, 2.0, -2.0]);
-        setMatrixUniforms();
+        cubeRender.setVertUniforms(pMatrix, mvMatrix);
         cubeRender.draw();
     }
     
     function drawScene() {
-    
-        
+        //console.log("drawScene")
+            
         // -- Render the base scene to a frame buffer texture
-        gl.bindFramebuffer(gl.FRAMEBUFFER, rttFramebuffer);
+        rttN.bind();
+        drawBaseScene(1);
+        rttN.unbind();
         
-        drawBaseScene();
-        
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        rttD.bind();
+        drawBaseScene(2);
+        rttD.unbind();
         
         // -- Render the scene using the frame buffer texture
         
@@ -205,21 +143,21 @@
 
         mat4.identity(mvMatrix);
 
-        mat4.translate(mvMatrix, [-1.5, -0.5, -7.0]);
-        //mat4.rotateX(mvMatrix, 0.4);
-        
-        //mat4.rotateY(mvMatrix, sceneRotate);
-        //sceneRotate += 0.5*deltaT;
+        //mat4.translate(mvMatrix, [-1.5, -0.5, -7.0]);
+        mat4.translate(mvMatrix, [0.0, 0.0, -2.5]);
     
-        quadRender.bindBuffers(shaderProgram);
+        quadRender.bindBuffers();
         
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, rttTexture);
-        gl.uniform1i(shaderProgram.samplerUniform, 0);
-
+        rttN.bindTexture();
+        
+        gl.activeTexture(gl.TEXTURE1);
+        rttD.bindTexture();
+        
+        quadRender.setFragUniforms(3, dx, dy);
         
         // transform
-        setMatrixUniforms();
+        quadRender.setVertUniforms(pMatrix, mvMatrix);
         
         // render
         quadRender.draw();
@@ -243,7 +181,14 @@
         
         var useRtt = document.getElementById("useRtt").checked;
         
+        var speedString = document.getElementById("speedInput").value;
+        var rotSpeed = 0;
+        var speedFloat = parseFloat(speedString);
+        if (speedFloat)
+            rotSpeed = speedFloat;
+        
         //console.log(useRtt);
+        sceneRotate += rotSpeed*deltaT;
         
         if (useRtt)
             drawScene();
@@ -253,18 +198,27 @@
         window.requestAnimationFrame(step);
     }
 
+    var dx = 0.0;
+    var dy = 0.0;
+    
     function webGLStart() {
+        //console.log("webGLStart")
+        
         var canvas = document.getElementById("webgl-canvas");
+        
         initGL(canvas);
-        initFramebuffer();
-        initShaders();
-        initBuffers();
+        
+        init();        
+        
         initTexture();
 
         gl.enable(gl.DEPTH_TEST);
 
         //drawScene();
         
+        dx = 1.0 / gl.viewportWidth;
+        dy = 1.0 / gl.viewportHeight;
+    
         window.requestAnimationFrame(step);
     }
 
@@ -280,10 +234,10 @@
     <script type="text/javascript">
         document.getElementById("test").innerHTML = "Javascript Hello";
     </script>
-    <input type="checkbox" id="useRtt" /> Use render to texture<br/>
-    
+    <input type="checkbox" id="useRtt" /> Use render to texture.
+    Speed: <input type="text" id="speedInput" value="0.25" /> 
     <p> 
-        <canvas id="webgl-canvas" style="border: none;" width="800" height="450"></canvas>
+        <canvas id="webgl-canvas" style="border: none;" width="512" height="512"></canvas>
     </>
 </body>
 

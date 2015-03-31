@@ -49,7 +49,60 @@ function Renderable (iShape) {
     this.vertexNormalBuffer = undefined;
     this.vertexTextureCoordBuffer = undefined;
     
-    this.init = function () {
+    this.shaderProgram = undefined;
+
+    this.setFragUniforms = function (output, dx, dy) {
+        gl.uniform1i(this.shaderProgram.samplerUniform0, 0);
+        gl.uniform1i(this.shaderProgram.samplerUniform1, 1);
+        gl.uniform1i(this.shaderProgram.outputUniform, output);
+        gl.uniform1f(this.shaderProgram.dxUniform, dx);
+        gl.uniform1f(this.shaderProgram.dyUniform, dy);
+    }
+    
+    this.setVertUniforms = function (pMatrix, mvMatrix) {
+        gl.uniformMatrix4fv(this.shaderProgram.pMatrixUniform, false, pMatrix);
+        gl.uniformMatrix4fv(this.shaderProgram.mvMatrixUniform, false, mvMatrix);
+    }
+
+    this.initShaders = function (prefix) {
+        var fragmentShader = getShader(gl, "fragment",  './shaders/'+prefix+'-frag.glsl');
+        var vertexShader = getShader(gl, "vertex",  './shaders/'+prefix+'-vert.glsl');
+
+        this.shaderProgram = gl.createProgram();
+        gl.attachShader(this.shaderProgram, vertexShader);
+        gl.attachShader(this.shaderProgram, fragmentShader);
+        gl.linkProgram(this.shaderProgram);
+
+        if (!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        gl.useProgram(this.shaderProgram);
+
+        this.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(this.shaderProgram, "aVertexPosition");
+        gl.enableVertexAttribArray(this.shaderProgram.vertexPositionAttribute);
+
+        this.shaderProgram.vertexColorAttribute = gl.getAttribLocation(this.shaderProgram, "aVertexColor");
+        gl.enableVertexAttribArray(this.shaderProgram.vertexColorAttribute);
+    
+        this.shaderProgram.vertexNormalAttribute = gl.getAttribLocation(this.shaderProgram, "aVertexNormal");
+        gl.enableVertexAttribArray(this.shaderProgram.vertexNormalAttribute);
+        
+        this.shaderProgram.textureCoordAttribute = gl.getAttribLocation(this.shaderProgram, "aTextureCoord");
+        gl.enableVertexAttribArray(this.shaderProgram.textureCoordAttribute);
+    
+        this.shaderProgram.samplerUniform0 = gl.getUniformLocation(this.shaderProgram, "uSampler0");
+        this.shaderProgram.samplerUniform1 = gl.getUniformLocation(this.shaderProgram, "uSampler1");
+        this.shaderProgram.outputUniform = gl.getUniformLocation(this.shaderProgram, "uOutputType");
+        this.shaderProgram.dxUniform = gl.getUniformLocation(this.shaderProgram, "uDx");
+        this.shaderProgram.dyUniform = gl.getUniformLocation(this.shaderProgram, "uDy");
+        
+        this.shaderProgram.pMatrixUniform = gl.getUniformLocation(this.shaderProgram, "uPMatrix");
+        this.shaderProgram.mvMatrixUniform = gl.getUniformLocation(this.shaderProgram, "uMVMatrix");
+    }
+    
+    this.initBuffers = function () {
+        
         //---- Position
         
         this.vertexPositionBuffer = gl.createBuffer();
@@ -96,26 +149,28 @@ function Renderable (iShape) {
         this.vertexTextureCoordBuffer.numItems = vertCount;//cubeTextureCoords.length / this.vertexTextureCoordBuffer.itemSize;
     }
     
-    this.bindBuffers = function (shaderProgram) {
+    this.bindBuffers = function () {
+        
+        gl.useProgram(this.shaderProgram);
         
         // position
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer);
-        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(this.shaderProgram.vertexPositionAttribute, this.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
     
         // topology
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
         
         // color
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexColorBuffer);
-        gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, this.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(this.shaderProgram.vertexColorAttribute, this.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
         //normals
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexNormalBuffer);
-        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(this.shaderProgram.vertexNormalAttribute, this.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
         //texture
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexTextureCoordBuffer);
-        gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.vertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(this.shaderProgram.textureCoordAttribute, this.vertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
     }
     
@@ -123,3 +178,63 @@ function Renderable (iShape) {
         gl.drawElements(gl.TRIANGLES, this.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
     }
 }
+
+
+function RenderToTexture (iSize) {
+    
+    this.size = iSize;
+    this.frameBuffer = undefined;
+    this.texture = undefined;
+
+    this.initFrameBuffer = function () {
+        
+        // create frame buffer
+        this.frameBuffer = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
+        this.frameBuffer.width = this.size;
+        this.frameBuffer.height = this.size;
+        
+        // create empty texture target
+        this.texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, this.texture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+        
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        // fill texture with empty pixels
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.frameBuffer.width, this.frameBuffer.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        gl.generateMipmap(gl.TEXTURE_2D);
+
+        // create render buffer for depth
+        var renderbuffer = gl.createRenderbuffer();
+        gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, this.frameBuffer.width, this.frameBuffer.height);
+        
+        // attach depth and texture buffers to frame buffer
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture, 0);
+        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuffer);
+
+        // clear
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    }
+    
+    this.bind = function () {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
+    }
+    
+    this.unbind = function () {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    }
+    
+    this.bindTexture = function () {
+        gl.bindTexture(gl.TEXTURE_2D, this.texture);
+        // must re-generate mip map each frame since frame buffer render creates a new texture
+        gl.generateMipmap(gl.TEXTURE_2D);
+    }
+}
+  
