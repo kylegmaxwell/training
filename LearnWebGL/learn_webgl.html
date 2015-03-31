@@ -10,7 +10,7 @@
 <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 
 <!-- Vertex data and definition of cube object -->
-<script type="text/javascript" src="js/cube_model.js"></script>
+<script type="text/javascript" src="js/models.js"></script>
 
 <!-- defines "gl" object -->
 <script type="text/javascript" src="js/webgl_utils.js"></script>
@@ -62,59 +62,25 @@
         gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
     }
 
-    var cubeVerticesIndexBuffer;
-    var cubeVertexPositionBuffer;
-    var cubeVertexColorBuffer;
-    var cubeVertexNormalBuffer;
-    var cubeVertexTextureCoordBuffer;
-
+    
+    var cubeShape;
+    var cubeRender;
+    
+    var quadShape;
+    var quadRender;
+    
     function initBuffers() {
         
-        //---- Position
+        // create the model vertex data
+        cubeShape = new Cube();
+        quadShape = new Quad();
         
-        cubeVertexPositionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cubeVertexPositions), gl.STATIC_DRAW);
+        // create the opengl buffers
+        cubeRender = new Renderable(cubeShape);
+        cubeRender.init();
         
-        cubeVertexPositionBuffer.itemSize = 3;
-        cubeVertexPositionBuffer.numItems = cubeVertexPositions.length / cubeVertexPositionBuffer.itemSize;
-        
-        //---- Topology 
-        
-        // Now send the element array to GL
-        cubeVerticesIndexBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
-        cubeVerticesIndexBuffer.numItems = cubeVertexIndices.length;
-        
-        var vertCount = cubeVertexPositionBuffer.numItems;
-        
-        //---- Color
-        
-        cubeVertexColorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexColorBuffer);
-        colors = []
-        for (var i=0; i < vertCount; i++) {
-          colors = colors.concat([1.0, 1.0, 1.0, 1.0]);
-        }
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-        cubeVertexColorBuffer.itemSize = 4;
-        cubeVertexColorBuffer.numItems = vertCount;
-        
-        //---- Normal
-        
-        cubeVertexNormalBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexNormalBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cubeVertexNormals), gl.STATIC_DRAW);
-        cubeVertexNormalBuffer.itemSize = 3;
-        cubeVertexNormalBuffer.numItems = vertCount;
-        
-        //---- Texture
-        cubeVertexTextureCoordBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cubeTextureCoords), gl.STATIC_DRAW);
-        cubeVertexTextureCoordBuffer.itemSize = 2;
-        cubeVertexTextureCoordBuffer.numItems = cubeTextureCoords.length / cubeVertexTextureCoordBuffer.itemSize;
+        quadRender = new Renderable(quadShape);
+        quadRender.init();
     }
     
     var rttFramebuffer;
@@ -125,7 +91,7 @@
         // create frame buffer
         rttFramebuffer = gl.createFramebuffer();
         gl.bindFramebuffer(gl.FRAMEBUFFER, rttFramebuffer);
-        rttSize = 512;
+        rttSize = 1024;
         rttFramebuffer.width = rttSize;
         rttFramebuffer.height = rttSize;
         
@@ -133,8 +99,10 @@
         rttTexture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, rttTexture);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
         // fill texture with empty pixels
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, rttFramebuffer.width, rttFramebuffer.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 
@@ -178,9 +146,11 @@
     function drawBaseScene() {
     
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+        
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 10.0, pMatrix);
+        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 20.0, pMatrix);
 
         mat4.identity(mvMatrix);
 
@@ -190,57 +160,45 @@
         mat4.rotateY(mvMatrix, sceneRotate);
         sceneRotate += 0.5*deltaT;
     
-        // position
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-    
-        // color
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexColorBuffer);
-        gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, cubeVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-        //normals
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexNormalBuffer);
-        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, cubeVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-        //texture
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
-        gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
+        //bind opengl buffers
+        cubeRender.bindBuffers(shaderProgram);
+        
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
         gl.uniform1i(shaderProgram.samplerUniform, 0);
-
-        // topology
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
         
-        // transform
+        // transform and draw
         setMatrixUniforms();
-        
-        // render
-        
-        gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+        cubeRender.draw();
         
         mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
         setMatrixUniforms();
-        gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+        cubeRender.draw();
         
         mat4.translate(mvMatrix, [0.0, 0.0, 2.0]);
         setMatrixUniforms();
-        gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+        cubeRender.draw();
         
         mat4.translate(mvMatrix, [0.0, 2.0, -2.0]);
         setMatrixUniforms();
-        gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+        cubeRender.draw();
     }
     
     function drawScene() {
     
+        
+        // -- Render the base scene to a frame buffer texture
         gl.bindFramebuffer(gl.FRAMEBUFFER, rttFramebuffer);
+        
         drawBaseScene();
+        
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         
+        // -- Render the scene using the frame buffer texture
         
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+        
+        gl.clearColor(0.0, 0.0, 0.3, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 10.0, pMatrix);
@@ -248,40 +206,23 @@
         mat4.identity(mvMatrix);
 
         mat4.translate(mvMatrix, [-1.5, -0.5, -7.0]);
-        mat4.rotateX(mvMatrix, 0.4);
+        //mat4.rotateX(mvMatrix, 0.4);
         
-        mat4.rotateY(mvMatrix, sceneRotate);
-        sceneRotate += 0.5*deltaT;
+        //mat4.rotateY(mvMatrix, sceneRotate);
+        //sceneRotate += 0.5*deltaT;
     
-        // position
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-    
-        // color
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexColorBuffer);
-        gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, cubeVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-        //normals
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexNormalBuffer);
-        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, cubeVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-        //texture rttTexture
-        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
-        gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
+        quadRender.bindBuffers(shaderProgram);
+        
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, rttTexture);
         gl.uniform1i(shaderProgram.samplerUniform, 0);
 
-        // topology
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
         
         // transform
         setMatrixUniforms();
         
         // render
-        
-        gl.drawElements(gl.TRIANGLES, cubeVerticesIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+        quadRender.draw();
         
     
     }
@@ -320,7 +261,6 @@
         initBuffers();
         initTexture();
 
-        gl.clearColor(0.0, 0.0, 0.3, 1.0);
         gl.enable(gl.DEPTH_TEST);
 
         //drawScene();
