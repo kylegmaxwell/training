@@ -54,6 +54,7 @@ function Renderable (iShape) {
     this.setFragUniforms = function (output, dx, dy) {
         gl.uniform1i(this.shaderProgram.samplerUniform0, 0);
         gl.uniform1i(this.shaderProgram.samplerUniform1, 1);
+        gl.uniform1i(this.shaderProgram.samplerUniform2, 2);
         gl.uniform1i(this.shaderProgram.outputUniform, output);
         gl.uniform1f(this.shaderProgram.dxUniform, dx);
         gl.uniform1f(this.shaderProgram.dyUniform, dy);
@@ -93,6 +94,7 @@ function Renderable (iShape) {
     
         this.shaderProgram.samplerUniform0 = gl.getUniformLocation(this.shaderProgram, "uSampler0");
         this.shaderProgram.samplerUniform1 = gl.getUniformLocation(this.shaderProgram, "uSampler1");
+        this.shaderProgram.samplerUniform2 = gl.getUniformLocation(this.shaderProgram, "uSampler2");
         this.shaderProgram.outputUniform = gl.getUniformLocation(this.shaderProgram, "uOutputType");
         this.shaderProgram.dxUniform = gl.getUniformLocation(this.shaderProgram, "uDx");
         this.shaderProgram.dyUniform = gl.getUniformLocation(this.shaderProgram, "uDy");
@@ -185,8 +187,10 @@ function RenderToTexture (iSize) {
     this.size = iSize;
     this.frameBuffer = undefined;
     this.texture = undefined;
-
+    this.fpTextures = undefined;
+    
     this.initFrameBuffer = function () {
+        this.fpTextures = gl.getExtension("OES_texture_float");
         
         // create frame buffer
         this.frameBuffer = gl.createFramebuffer();
@@ -197,17 +201,30 @@ function RenderToTexture (iSize) {
         // create empty texture target
         this.texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+        if (this.fpTextures) {
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        }
+        else {
+            // TODO this could also differ on whether using float textures
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+        }
         
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
         // fill texture with empty pixels
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.frameBuffer.width, this.frameBuffer.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-        gl.generateMipmap(gl.TEXTURE_2D);
-
+        
+        if (this.fpTextures) {
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.frameBuffer.width, this.frameBuffer.height, 0, gl.RGBA, gl.FLOAT, null);
+        }
+        else {
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.frameBuffer.width, this.frameBuffer.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+            console.error("OES_texture_floats extension not supported.");
+            gl.generateMipmap(gl.TEXTURE_2D);
+        }
+        
         // create render buffer for depth
         var renderbuffer = gl.createRenderbuffer();
         gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
@@ -234,7 +251,9 @@ function RenderToTexture (iSize) {
     this.bindTexture = function () {
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
         // must re-generate mip map each frame since frame buffer render creates a new texture
-        gl.generateMipmap(gl.TEXTURE_2D);
+        if(!this.fpTextures) {
+            gl.generateMipmap(gl.TEXTURE_2D);
+        }
     }
 }
   

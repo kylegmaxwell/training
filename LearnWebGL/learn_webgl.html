@@ -30,6 +30,7 @@
     
     var rttN;
     var rttD;
+    var rttP;
     
     // initialize the rendering contexts 
     function init() {
@@ -53,6 +54,9 @@
         
         rttD = new RenderToTexture(512);
         rttD.initFrameBuffer();
+        
+        rttP = new RenderToTexture(512);
+        rttP.initFrameBuffer();
     }
     
     var cubeTexture;
@@ -86,15 +90,16 @@
         gl.clearColor(0., 0., 0., 1.);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+        // camera matrix
         mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 20.0, pMatrix);
 
+        mat4.translate(pMatrix, [-1.5, 0.5, -7.0]);
+        mat4.rotateX(pMatrix, 0.4);
+        mat4.rotateY(pMatrix, sceneRotate);
+
+        // modeling matrix
         mat4.identity(mvMatrix);
 
-        mat4.translate(mvMatrix, [-1.5, -0.5, -7.0]);
-        mat4.rotateX(mvMatrix, 0.4);
-        
-        mat4.rotateY(mvMatrix, sceneRotate);
-    
         //bind opengl buffers
         cubeRender.bindBuffers();
                 
@@ -132,6 +137,10 @@
         drawBaseScene(2);
         rttD.unbind();
         
+        rttP.bind();
+        drawBaseScene(4);
+        rttP.unbind();
+        
         // -- Render the scene using the frame buffer texture
         
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
@@ -139,12 +148,12 @@
         gl.clearColor(0.0, 0.0, 0.3, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+        // camera matrix
         mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 10.0, pMatrix);
+        mat4.translate(pMatrix, [0.0, 0.0, -2.5]);
 
+        // modeling matrix
         mat4.identity(mvMatrix);
-
-        //mat4.translate(mvMatrix, [-1.5, -0.5, -7.0]);
-        mat4.translate(mvMatrix, [0.0, 0.0, -2.5]);
     
         quadRender.bindBuffers();
         
@@ -153,6 +162,9 @@
         
         gl.activeTexture(gl.TEXTURE1);
         rttD.bindTexture();
+        
+        gl.activeTexture(gl.TEXTURE2);
+        rttP.bindTexture();
         
         quadRender.setFragUniforms(3, dx, dy);
         
@@ -234,8 +246,8 @@
     <script type="text/javascript">
         document.getElementById("test").innerHTML = "Javascript Hello";
     </script>
-    <input type="checkbox" id="useRtt" /> Use render to texture.
-    Speed: <input type="text" id="speedInput" value="0.25" /> 
+    <input type="checkbox" id="useRtt" checked /> Use render to texture.
+    Speed: <input type="text" id="speedInput" value="0.1" /> 
     <p> 
         <canvas id="webgl-canvas" style="border: none;" width="512" height="512"></canvas>
     </>
