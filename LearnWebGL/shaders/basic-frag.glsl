@@ -10,6 +10,7 @@ varying vec4 vWSPos;
 uniform sampler2D uSampler0; // Normal
 uniform sampler2D uSampler1; // Depth
 uniform sampler2D uSampler2; // Position
+uniform sampler2D uSampler3; // Color
 
 uniform int uOutputType;
 
@@ -122,8 +123,8 @@ float checkVisibility(vec2 uv, vec3 n, vec3 p, vec2 off) {
     
     vec3 p2 = samplePosition(uv, i, j);
     vec3 dp = p2-p;
-    
-    if (length(dp) < 0.001)
+    float dpl = length(dp);
+    if (dpl < 0.001)
         return 1.0;
     dp = normalize(dp);
     
@@ -138,9 +139,23 @@ float checkVisibility(vec2 uv, vec3 n, vec3 p, vec2 off) {
         vis = 1.0;
     }
     
+    // occlusion also falls off with distance
+    float range = 2.0;
+    dpl = clamp(dpl, 0.0, range) / range;
+    vis = mix(vis, 1.0, dpl);
+    
     return vis;
 }
 
+/*! 
+\brief Check the visibility of a pixel based on occlusion by its neighbors
+\param uv Coordinate of the reference pixel
+\param n Normal at the reference pixel
+\param p World space position of the reference pixel
+\param dir Sample direction in image space 
+\param spread Distance to samples in image space
+\return How visible the pixel is from many directions (0 occluded to 1 visible)
+*/
 float areaVisibility(vec2 uv, vec3 n, vec3 p, vec2 dir, float spread) {
 
     float minVis = 1.0;
@@ -162,9 +177,9 @@ float areaVisibility(vec2 uv, vec3 n, vec3 p, vec2 dir, float spread) {
 // 5. Test on real house model.
 
 #define sampleCount (4*filterSize)
-vec4 sampleOcclusion(vec2 uv) {
+float sampleOcclusion(vec2 uv) {
 
-    vec4 color = vec4(0., 0., 0., 1.);
+    float occ = 0.0;
     
     //Pixel properties
     vec3 n = normalize(sampleNormal(uv, 0, 0));
@@ -178,13 +193,13 @@ vec4 sampleOcclusion(vec2 uv) {
     
     vis += areaVisibility(uv, n, p, dir, 8.0);
     vis += areaVisibility(uv, n, p, dir, 16.0);
-    vis += areaVisibility(uv, n, p, dir, 32.0);
+    vis += areaVisibility(uv, n, p, dir, 12.0);
     vis *= 0.333;//normalize
         
-    color.x = vis;
-    color.x *= 2.0;
-    
-    return color;
+    occ = vis;
+    occ *= 2.0;
+    occ = clamp(occ,0.,1.);
+    return occ;
 }
 
 void main(void)
@@ -209,9 +224,10 @@ void main(void)
     
     vec2 uv = vTextureCoord.st;
     // These 3 samples are for debug
-    vec4 texColor0 = texture2D(uSampler0, uv);
-    vec4 texColor1 = texture2D(uSampler1, uv);
-    vec4 texColor2 = texture2D(uSampler2, uv);
+    vec4 texColor0 = texture2D(uSampler0, uv); // N
+    vec4 texColor1 = texture2D(uSampler1, uv); // D
+    vec4 texColor2 = texture2D(uSampler2, uv); // P
+    vec4 texColor3 = texture2D(uSampler3, uv); // C
     
     vec4 color;
     color = vec4(0.0, 0.0, 0.0, 1.0);
@@ -234,9 +250,11 @@ void main(void)
   
     if (uOutputType==3) { // occlusion
         
-        color = sampleOcclusion(vTextureCoord.st);
+        float occ = sampleOcclusion(vTextureCoord.st);
+        color.x = occ;
         color.xyz = color.xxx;
-        color.xyz = color.x * abs(texColor0.xyz);
+        color.xyz = color.x * abs(texColor3.xyz);
+        //color.xyz = texColor3.xyz;
         
     }
     

@@ -31,6 +31,7 @@
     var rttN;
     var rttD;
     var rttP;
+    var rttC;
     
     // initialize the rendering contexts 
     function init() {
@@ -57,6 +58,10 @@
         
         rttP = new RenderToTexture(512);
         rttP.initFrameBuffer();
+        
+        rttC = new RenderToTexture(512);
+        rttC.initFrameBuffer();
+        
     }
     
     var cubeTexture;
@@ -87,7 +92,6 @@
     
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         
-        gl.clearColor(0., 0., 0., 1.);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // camera matrix
@@ -112,7 +116,7 @@
         cubeRender.setVertUniforms(pMatrix, mvMatrix);
         cubeRender.draw();
         
-        mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
+        mat4.translate(mvMatrix, [2.5, 0.0, 0.0]);
         cubeRender.setVertUniforms(pMatrix, mvMatrix);
         cubeRender.draw();
         
@@ -130,16 +134,24 @@
             
         // -- Render the base scene to a frame buffer texture
         rttN.bind();
-        drawBaseScene(1);
+        gl.clearColor(0., -1., 0., 1.);
+        drawBaseScene(1); // output normals
         rttN.unbind();
         
         rttD.bind();
-        drawBaseScene(2);
+        gl.clearColor(100., 100., 100., 1.);
+        drawBaseScene(2); // output depth
         rttD.unbind();
         
         rttP.bind();
-        drawBaseScene(4);
+        gl.clearColor(0., -100., 0., 1.);
+        drawBaseScene(4); // output position
         rttP.unbind();
+        
+        rttC.bind();
+        gl.clearColor(0., 0., 0.3, 1.);
+        drawBaseScene(0); // output color
+        rttC.unbind();
         
         // -- Render the scene using the frame buffer texture
         
@@ -165,6 +177,9 @@
         
         gl.activeTexture(gl.TEXTURE2);
         rttP.bindTexture();
+        
+        gl.activeTexture(gl.TEXTURE3);
+        rttC.bindTexture();
         
         quadRender.setFragUniforms(3, dx, dy);
         
@@ -202,11 +217,13 @@
         //console.log(useRtt);
         sceneRotate += rotSpeed*deltaT;
         
-        if (useRtt)
+        if (useRtt) {
             drawScene();
-        else
-            drawBaseScene();
-        
+        }
+        else {
+            gl.clearColor(0., 0., .3, 1.);
+            drawBaseScene(0);
+        }
         window.requestAnimationFrame(step);
     }
 

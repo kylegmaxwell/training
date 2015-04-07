@@ -55,6 +55,7 @@ function Renderable (iShape) {
         gl.uniform1i(this.shaderProgram.samplerUniform0, 0);
         gl.uniform1i(this.shaderProgram.samplerUniform1, 1);
         gl.uniform1i(this.shaderProgram.samplerUniform2, 2);
+        gl.uniform1i(this.shaderProgram.samplerUniform3, 3);
         gl.uniform1i(this.shaderProgram.outputUniform, output);
         gl.uniform1f(this.shaderProgram.dxUniform, dx);
         gl.uniform1f(this.shaderProgram.dyUniform, dy);
@@ -95,6 +96,7 @@ function Renderable (iShape) {
         this.shaderProgram.samplerUniform0 = gl.getUniformLocation(this.shaderProgram, "uSampler0");
         this.shaderProgram.samplerUniform1 = gl.getUniformLocation(this.shaderProgram, "uSampler1");
         this.shaderProgram.samplerUniform2 = gl.getUniformLocation(this.shaderProgram, "uSampler2");
+        this.shaderProgram.samplerUniform3 = gl.getUniformLocation(this.shaderProgram, "uSampler3");
         this.shaderProgram.outputUniform = gl.getUniformLocation(this.shaderProgram, "uOutputType");
         this.shaderProgram.dxUniform = gl.getUniformLocation(this.shaderProgram, "uDx");
         this.shaderProgram.dyUniform = gl.getUniformLocation(this.shaderProgram, "uDy");
