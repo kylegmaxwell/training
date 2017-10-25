@@ -1,4 +1,3 @@
-#include <QCoreApplication>
 #include <iostream>
 
 #include "computeparity.h"
@@ -6,20 +5,22 @@
 #include "testsuite.h"
 #include "narytree.h"
 #include "convertbase.h"
-#include "queens.h"
+#include "queens/queens.h"
 #include "listcycle.h"
 #include "pairsum.h"
 #include "maxstack.h"
 #include "binarytree.h"
-#include "heapmerge.h"
 #include "binarysearch.h"
 #include "hashletter.h"
-#include "powerset.h"
 #include "dynamicprogramming.h"
 #include "sorting.h"
 
 using namespace std;
 
+/*!
+ * Main entry point for code.
+ * Executes all tests.
+ */
 int main(int argc, char *argv[])
 {
     // Initialize test suite
@@ -57,9 +58,9 @@ int main(int argc, char *argv[])
     BinaryTree binary;
     tests.addTest(&binary);
 
-    // Test 9
-    HeapMerge heap;
-    tests.addTest(&heap);
+    // Test 9 TODO <queue> does not compile
+    //HeapMerge heap;
+    //tests.addTest(&heap);
 
     // Test 10
     BinarySearch search;
@@ -69,9 +70,9 @@ int main(int argc, char *argv[])
     HashLetter hash;
     tests.addTest(&hash);
 
-    // Test 12
-    PowerSet set;
-    tests.addTest(&set);
+    // Test 12 TODO <queue> does not compile
+    //PowerSet set;
+    //tests.addTest(&set);
 
     // Test 13
     DynamicProgramming dyno;
@@ -84,7 +85,5 @@ int main(int argc, char *argv[])
     // Run Tests
     tests.test();
 
-    QCoreApplication a(argc, argv);
-
-    return a.exec();
+	return 0;
 }

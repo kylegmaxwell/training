@@ -2,6 +2,7 @@
 #include <stack>
 #include <utility> // pair
 #include <math.h>
+#include <algorithm>
 
 using namespace std;
 

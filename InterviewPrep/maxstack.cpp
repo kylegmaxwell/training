@@ -1,4 +1,5 @@
 #include "maxstack.h"
+#include <algorithm>
 
 using namespace std;
 
