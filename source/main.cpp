@@ -25,7 +25,7 @@ using namespace std;
  */
 int main(int argc, char *argv[])
 {
-	bool verbose = false;
+    bool verbose = false;
 
     // Initialize test suite
     TestSuite tests;
@@ -89,5 +89,5 @@ int main(int argc, char *argv[])
     // Run Tests
     tests.test();
 
-	return 0;
+    return 0;
 }
