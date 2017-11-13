@@ -100,7 +100,7 @@ public:
     Combinations::Int chooseVeryFlawed(Combinations::Int n, Combinations::Int k);
 
     // count the number of paths from (row,col) to (mRows-1, mCols-1)
-    size_t countPaths(const Array2D<bool> &board, Array2D<int> &cache, size_t row, size_t col);
+    int countPaths(const Array2D<bool> &board, Array2D<int> &cache, size_t row, size_t col);
 
     //! Test the factorial function
     TestResult testFactorial();

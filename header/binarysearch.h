@@ -20,7 +20,7 @@ public:
      * \return The index, or -1 if not found.
      */
     template <typename T>
-    static int search(std::vector<T> &values, T value);
+    static size_t search(std::vector<T> &values, T value);
 
     /*!
      * \brief Search for the leftmost index of the given value.
@@ -28,8 +28,7 @@ public:
      * \return The index, or -1 if not found.
      */
     template <typename T>
-    int searchLeft(std::vector<T> &values, size_t index);
-
+    size_t searchLeft(std::vector<T> &values, size_t index);
 };
 
 #endif // BINARYSEARCH_H

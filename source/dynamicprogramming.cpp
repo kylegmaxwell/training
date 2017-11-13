@@ -44,10 +44,10 @@ Combinations::Int DynamicProgramming::chooseVeryFlawed(Combinations::Int n, Comb
 {
     // cant compute directly due to overflow
     // this was my first attempt, which is even more flawed
-    return factorial(n) / (factorial(k) * factorial(n-k) );
+    return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
-size_t DynamicProgramming::countPaths(const Array2D<bool> &board, Array2D<int> &cache, size_t row, size_t col)
+int DynamicProgramming::countPaths(const Array2D<bool> &board, Array2D<int> &cache, size_t row, size_t col)
 {
     size_t maxR = board.getRows()-1;
     size_t maxC = board.getCols()-1;
@@ -60,16 +60,16 @@ size_t DynamicProgramming::countPaths(const Array2D<bool> &board, Array2D<int> &
     if (cachedVal != -1)
         return cachedVal;
 
-    size_t paths = 0;
+    int paths = 0;
 
     if (row < maxR) {
-        size_t newRow = row+1;
+        size_t newRow = row + 1;
         if (!board.getState(newRow, col)) // make sure space is empty
             paths += countPaths(board, cache, newRow, col);
     }
 
     if (col < maxC) {
-        size_t newCol = col+1;
+        size_t newCol = col + 1;
         if (!board.getState(row, newCol)) // make sure space is empty
             paths += countPaths(board, cache, row, newCol);
     }
@@ -159,9 +159,9 @@ UnitTest::TestResult DynamicProgramming::testPaths(Combinations &comb)
     if (mVerbose)
         cout << "num paths " << paths << endl;
 
-    int overs = cols - 1;
-    int downs = rows - 1;
-    Combinations::Int expectedResult = comb.choose( overs+downs, downs );
+    size_t overs = cols - 1;
+    size_t downs = rows - 1;
+    Combinations::Int expectedResult = comb.choose(overs + downs, downs);
 
     if (paths != expectedResult) {
         if (mVerbose)

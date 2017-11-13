@@ -12,8 +12,8 @@ PairSum::PairSum() : UnitTest(false)
 bool PairSum::hasPairSum(PairSum::IntVec &vec, int querySum)
 {
     // Initialize an index at the start and end of the array
-    int iMin = 0;
-    int iMax = vec.size() - 1;
+    size_t iMin = 0;
+    size_t iMax = vec.size() - 1;
 
     // Move the indexes up or down until the sum is found or they cross
     while (iMin < iMax) {
@@ -48,14 +48,12 @@ bool PairSum::hasThreeSum(PairSum::IntVec &vec, int querySum)
 
 bool PairSum::hasThreeSumFast(PairSum::IntVec &vec, int querySum)
 {// WARNING: Does not work
-
     // Initialize an index at the start and end of the array
-    int iMin = 0;
-    int iMax = vec.size() - 1;
+    size_t iMin = 0;
+    size_t iMax = vec.size() - 1;
 
     // Move the indexes up or down until the sum is found or they cross
     while (iMin < iMax) {
-
         //cout << "LOOP " << iMin << " " << iMax << endl;
         const int minVal = vec[iMin];
         const int maxVal = vec[iMax];
@@ -65,9 +63,9 @@ bool PairSum::hasThreeSumFast(PairSum::IntVec &vec, int querySum)
         //cout << "looking for " << searchValue << endl;
 
         // check if we have found the sum
-        int closest=0;
-        int closestIdx=0;
-        if (binarySearch(vec, searchValue, iMin, iMax, closest, closestIdx)!=-1) {
+        int closest = 0;
+        size_t closestIdx = 0;
+        if (binarySearch(vec, searchValue, iMin, iMax, closest, closestIdx) != -1) {
             if (mVerbose)
                 cout << "Three sum is found for " << querySum << endl;
             return true;
@@ -75,7 +73,7 @@ bool PairSum::hasThreeSumFast(PairSum::IntVec &vec, int querySum)
         //cout << "close " << closest  << endl;
         const int fullSum = currentPartialSum + closest;
         //cout << "full " << fullSum << endl;
-        const int iMid = iMin + (iMax - iMin) / 2;
+        const size_t iMid = iMin + (iMax - iMin) / 2;
 
         // Move the appropriate index
         //if (currentPartialSum > querySum)
@@ -101,30 +99,30 @@ bool PairSum::hasThreeSumFast(PairSum::IntVec &vec, int querySum)
     return false;
 }
 
-int PairSum::binarySearch(PairSum::IntVec &values, int searchValue, size_t firstIndex, size_t lastIndex, int &closest, int &closestIdx)
+size_t PairSum::binarySearch(PairSum::IntVec &values, int searchValue, size_t firstIndex, size_t lastIndex, int &closest, size_t &closestIdx)
 {
     if (values.empty() || firstIndex > lastIndex)
         return -1;
 
-    int  left = firstIndex;//0
-    int  right = lastIndex;//values.size()-1;
+    size_t  left = firstIndex;//0
+    size_t  right = lastIndex;//values.size()-1;
     while (left <= right) {
-//cout << "left " << left << "right " << right << endl;
-        int middle = left + (right - left) / 2;
+        //cout << "left " << left << "right " << right << endl;
+        size_t middle = left + (right - left) / 2;
         closest = values[middle];
         closestIdx = middle;
 
-        int middleL = middle;
-        if (middleL > (int)firstIndex)
-            middleL-=1;
-        int middleR = middle;
-        if (middleR < (int)lastIndex)
-            middleR+=1;
-        if (std::abs(values[middleR] - searchValue) < std::abs(closest-searchValue) ){
+        size_t middleL = middle;
+        if (middleL > (size_t)firstIndex)
+            middleL -= 1;
+        size_t middleR = middle;
+        if (middleR < (size_t)lastIndex)
+            middleR += 1;
+        if (std::abs(values[middleR] - searchValue) < std::abs(closest - searchValue)) {
             closest = values[middleR];
             closestIdx = middleR;
         }
-        if (std::abs(values[middleL] - searchValue) < std::abs(closest-searchValue) ) {
+        if (std::abs(values[middleL] - searchValue) < std::abs(closest - searchValue)) {
             closest = values[middleL];
             closestIdx = middleL;
         }
@@ -135,10 +133,10 @@ int PairSum::binarySearch(PairSum::IntVec &values, int searchValue, size_t first
         }
 
         if (arrayValue < searchValue) {
-            left = middle+1;
+            left = middle + 1;
         }
         else { // arrayValue > searchValue
-            right = middle-1;
+            right = middle - 1;
         }
     }
 

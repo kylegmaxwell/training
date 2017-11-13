@@ -23,7 +23,6 @@ void PowerSet::makePowerSetRecursive(StringList startSet, string element, String
     // make subsets containing the element
     element.append(newElem);
     makePowerSetRecursive(startSet, element, powerSet);
-
 }
 
 void PowerSet::makePowerSetIterative(PowerSet::StringList startSet, PowerSet::StringList &powerSet)
@@ -32,20 +31,19 @@ void PowerSet::makePowerSetIterative(PowerSet::StringList startSet, PowerSet::St
 
     // base case: bail if start set is empty
     while (!startSet.empty()) {
-
         // extract first element of start set
         string elem = startSet.back();
         startSet.pop_back();
 
         // double the set
-        int size = powerSet.size();
+        size_t size = powerSet.size();
 
         // add set without element
         // keep what is already in power set
 
         // add set with element
         // duplicate each element and add new element
-        for (int i = 0; i < size; i++) {
+        for (size_t i = 0; i < size; i++) {
             string newElem = powerSet[i];
             newElem.append(elem);
             powerSet.push_back(newElem);
@@ -56,13 +54,13 @@ void PowerSet::makePowerSetIterative(PowerSet::StringList startSet, PowerSet::St
 void PowerSet::printSet(ostream &stream, StringList &set)
 {
     sort(set.begin(), set.end(),
-         [] (const string &a, const string &b) -> bool {
-            if (a.size() == b.size())
-                return a < b;
-            else
-                return a.size() < b.size();
-        }
-     );
+        [](const string &a, const string &b) -> bool {
+        if (a.size() == b.size())
+            return a < b;
+        else
+            return a.size() < b.size();
+    }
+    );
 
     //cout << "Power Set:" << endl;
     for (auto itr = set.begin(); itr != set.end(); itr++) {
@@ -86,7 +84,7 @@ UnitTest::TestResult PowerSet::test()
 
     stringstream ss1;
     printSet(ss1, powerSet1);
-    if (! stringEqual(ss1.str(), expectedResult))
+    if (!stringEqual(ss1.str(), expectedResult))
         return FAIL;
 
     StringList powerSet2;
@@ -94,7 +92,7 @@ UnitTest::TestResult PowerSet::test()
 
     stringstream ss2;
     printSet(ss2, powerSet2);
-    if (! stringEqual(ss2.str(), expectedResult))
+    if (!stringEqual(ss2.str(), expectedResult))
         return FAIL;
 
     return PASS;

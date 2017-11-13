@@ -72,7 +72,7 @@ string ConvertBase::convertBase(int baseIn, string number, int baseOut)
 
     // convert the number from a string to an int using base
     int multiplier = 1;
-    for (int i = number.size()-1; i>= 0; i--) {
+    for (int i = (int)number.size()-1; i>= 0; i--) {
         char c = number[i];
         int digitValue = charToInt[c];
         value += digitValue * multiplier;
@@ -95,7 +95,7 @@ string ConvertBase::convertBase(int baseIn, string number, int baseOut)
     // reverse
     stringstream ss;
     // start at one before the last character, to drop extra zero
-    for (int i=numberChars.size()-2; i >= 0; i--) {
+    for (int i = (int)numberChars.size() - 2; i >= 0; i--) {
         char digit = numberChars[i];
         ss << digit;
     }

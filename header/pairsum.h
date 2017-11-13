@@ -35,7 +35,7 @@ public:
     // This was an attempt to solve the open problem for a n log n 3 sum search using a combination of the pair sum algorithm and binary search
     bool hasThreeSumFast(IntVec &vec, int querySum);
 
-    int binarySearch(IntVec &values, int searchValue, size_t firstIndex, size_t lastIndex, int &closest, int &closestIdx);
+    size_t binarySearch(IntVec &values, int searchValue, size_t firstIndex, size_t lastIndex, int &closest, size_t &closestIdx);
 
     virtual TestResult test();
 
