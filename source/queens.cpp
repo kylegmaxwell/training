@@ -38,10 +38,7 @@ UnitTest::TestResult Queens::test()
 void Queens::saveBoard(Board &b, bool verbose)
 {
     stringstream ss;
-    if (verbose)
-        b.printFull(ss);
-    else
-        b.printQueens(ss);
+    b.printQueens(ss);
     string result = ss.str();
 
     // record the attempt
@@ -51,8 +48,11 @@ void Queens::saveBoard(Board &b, bool verbose)
     if (mSet.find(result)== mSet.end()) {
         mSet.insert(result);
 
-        if (verbose)
-            cout << result;
+		if (verbose) {
+			stringstream ssv;
+			b.printFull(ssv);
+			cout << ssv.str();
+		}
     }
 }
 
