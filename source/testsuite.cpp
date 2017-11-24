@@ -12,7 +12,7 @@ void TestSuite::addTest(UnitTest *test)
     mTests.push_back(test);
 }
 
-void TestSuite::test()
+int TestSuite::test()
 {
     int count=0;
     int failures=0;
@@ -36,4 +36,5 @@ void TestSuite::test()
     if (failures != 1)
         cout << "s";
     cout << endl;
+    return failures == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }

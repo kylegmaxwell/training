@@ -10,11 +10,13 @@ Queens::Queens(bool verbose) : UnitTest(verbose), mSet(), mCount(0)
 
 UnitTest::TestResult Queens::test()
 {
+    const int MAX_BOARD_SIZE = 5;
+
     // board size =>           0,1,2,3,4, 5,6, 7, 8,  9, 10
     int expectedSolutions[] = {1,1,0,0,2,10,4,40,92,352,724};
 
     //! Run the queens algorithm for each size
-    for (int i = 0; i <= 7; i++) {
+    for (int i = 0; i <= MAX_BOARD_SIZE; i++) {
         mSet.clear();
         mCount = 0;
 

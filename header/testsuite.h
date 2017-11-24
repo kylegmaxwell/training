@@ -22,8 +22,9 @@ public:
 
     /*!
      * Run all the tests that have been added
+     * @returns status code
      */
-    void test();
+    int test();
 
 private:
 

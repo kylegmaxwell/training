@@ -16,6 +16,7 @@
 #include "sorting.h"
 #include "heapmerge.h"
 #include "powerset.h"
+#include "move.h"
 
 using namespace std;
 
@@ -86,8 +87,11 @@ int main(int argc, char *argv[])
     Sorting sorting;
     tests.addTest(&sorting);
 
-    // Run Tests
-    tests.test();
+    Move move;
+    tests.addTest(&move);
 
-    return 0;
+    // Run Tests
+    int status = tests.test();
+    
+    return status;
 }

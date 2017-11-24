@@ -93,6 +93,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\kyle\workspace\training\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -106,6 +107,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\kyle\workspace\training\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -123,7 +125,9 @@
     <ClInclude Include="header\heapmerge.h" />
     <ClInclude Include="header\listcycle.h" />
     <ClInclude Include="header\maxstack.h" />
+    <ClInclude Include="header\move.h" />
     <ClInclude Include="header\narytree.h" />
+    <ClInclude Include="header\os.h" />
     <ClInclude Include="header\pairsum.h" />
     <ClInclude Include="header\powerset.h" />
     <ClInclude Include="header\queens.h" />
@@ -143,6 +147,7 @@
     <ClCompile Include="source\listcycle.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\maxstack.cpp" />
+    <ClCompile Include="source\move.cpp" />
     <ClCompile Include="source\narytree.cpp" />
     <ClCompile Include="source\pairsum.cpp" />
     <ClCompile Include="source\powerset.cpp" />
