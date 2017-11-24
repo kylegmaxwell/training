@@ -1,4 +1,5 @@
 #include "sorting.h"
+#include <climits>
 
 using namespace std;
 

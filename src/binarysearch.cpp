@@ -54,7 +54,7 @@ UnitTest::TestResult BinarySearch::test()
 }
 
 template <typename T>
-static size_t BinarySearch::search(std::vector<T> &values, T searchValue)
+size_t BinarySearch::search(std::vector<T> &values, T searchValue)
 {
     if (values.empty())
         return -1;

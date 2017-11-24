@@ -81,5 +81,5 @@ Move & Move::operator=(Move && rhs)
 {
     DEBUG_PRINT("move assign");
     values = forward<vector<int>>(rhs.values);
-    return std::forward<Move>(rhs);
+    return *this;
 }

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kylegmaxwell/training.svg?branch=master)](https://travis-ci.org/kylegmaxwell/training)
+
 # training
 Sample code, interview prep, and training.
 
