@@ -1,22 +1,22 @@
 #include <iostream>
 
-#include "computeparity.h"
-#include "unittest.h"
-#include "testsuite.h"
-#include "narytree.h"
-#include "convertbase.h"
-#include "queens.h"
-#include "listcycle.h"
-#include "pairsum.h"
-#include "maxstack.h"
-#include "binarytree.h"
-#include "binarysearch.h"
-#include "hashletter.h"
-#include "dynamicprogramming.h"
-#include "sorting.h"
-#include "heapmerge.h"
-#include "powerset.h"
-#include "move.h"
+#include "src/computeparity.h"
+#include "src/unittest.h"
+#include "src/testsuite.h"
+#include "src/narytree.h"
+#include "src/convertbase.h"
+#include "src/queens.h"
+#include "src/listcycle.h"
+#include "src/pairsum.h"
+#include "src/maxstack.h"
+#include "src/binarytree.h"
+#include "src/binarysearch.h"
+#include "src/hashletter.h"
+#include "src/dynamicprogramming.h"
+#include "src/sorting.h"
+#include "src/heapmerge.h"
+#include "src/powerset.h"
+#include "src/move.h"
 
 using namespace std;
 
@@ -92,6 +92,6 @@ int main(int argc, char *argv[])
 
     // Run Tests
     int status = tests.test();
-    
+
     return status;
 }
