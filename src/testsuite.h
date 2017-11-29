@@ -1,7 +1,7 @@
-#ifndef TESTSUITE_H
-#define TESTSUITE_H
+#pragma once
 
 #include <vector>
+#include <memory>
 
 #include "unittest.h"
 
@@ -11,25 +11,9 @@
 class TestSuite
 {
 public:
-
-    //! Default constructor
-    TestSuite();
-
-    /*!
-     * Add a UnitTest (or one of it's child classes)
-     */
-    void addTest(UnitTest *test);
-
     /*!
      * Run all the tests that have been added
      * @returns status code
      */
-    int test();
-
-private:
-
-    //! The tests that can be run via the test function
-    std::vector<UnitTest*> mTests;
+    static int test(std::vector<std::shared_ptr<UnitTest>> tests);
 };
-
-#endif // TESTSUITE_H

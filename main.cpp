@@ -26,72 +26,26 @@ using namespace std;
  */
 int main(int argc, char *argv[])
 {
-    bool verbose = false;
-
     // Initialize test suite
-    TestSuite tests;
-
-    // Test 1
-    ComputeParity parity;
-    tests.addTest(&parity);
-
-    // Test 2
-    NaryTree tree;
-    tests.addTest(&tree);
-
-    // Test 3
-    ConvertBase base;
-    tests.addTest(&base);
-
-    // Test 4
-    Queens queens(verbose);
-    tests.addTest(&queens);
-
-    // Test 5
-    ListCycle cycle;
-    tests.addTest(&cycle);
-
-    // Test 6
-    PairSum pair;
-    tests.addTest(&pair);
-
-    // Test 7
-    MaxStack stack;
-    tests.addTest(&stack);
-
-    // Test 8
-    BinaryTree binary;
-    tests.addTest(&binary);
-
-    // Test 9
-    HeapMerge heap;
-    tests.addTest(&heap);
-
-    // Test 10
-    BinarySearch search;
-    tests.addTest(&search);
-
-    // Test 11
-    HashLetter hash;
-    tests.addTest(&hash);
-
-    // Test 12
-    PowerSet set;
-    tests.addTest(&set);
-
-    // Test 13
-    DynamicProgramming dyno;
-    tests.addTest(&dyno);
-
-    // Test 14
-    Sorting sorting;
-    tests.addTest(&sorting);
-
-    Move move;
-    tests.addTest(&move);
-
+    vector<shared_ptr<UnitTest>> tests = {
+        make_shared<Queens>(),
+        make_shared<DynamicProgramming>(),
+        make_shared<ComputeParity>(),
+        make_shared<NaryTree>(),
+        make_shared<ConvertBase>(),
+        make_shared<ListCycle>(),
+        make_shared<PairSum>(),
+        make_shared<MaxStack>(),
+        make_shared<BinaryTree>(),
+        make_shared<HeapMerge>(),
+        make_shared<BinarySearch>(),
+        make_shared<HashLetter>(),
+        make_shared<PowerSet>(),
+        make_shared<Sorting>(),
+        make_shared<Move>()
+    };
+    
     // Run Tests
-    int status = tests.test();
-
+    auto status = TestSuite::test(tests);
     return status;
 }

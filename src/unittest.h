@@ -1,5 +1,4 @@
-#ifndef UNITTEST_H
-#define UNITTEST_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -27,16 +26,14 @@ protected:
     bool mVerbose;
 
     //! Accessor for verbose
-    bool verbose()
+    bool verbose() const
     { return mVerbose; }
 
     /*!
      * Convenience function to compare strings and return a bool
      * @returns true when equal
      */
-    bool stringEqual(std::string a, std::string b) {
+    static bool stringEqual(std::string a, std::string b) {
         return a.compare(b)==0;
     }
 };
-
-#endif // UNITTEST_H

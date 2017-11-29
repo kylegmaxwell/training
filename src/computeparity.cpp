@@ -6,7 +6,6 @@ ComputeParity::ComputeParity() : UnitTest(false)
 {
 }
 
-
 int ComputeParity::computeParity(int value) {
 
     if (verbose())
