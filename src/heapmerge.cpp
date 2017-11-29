@@ -22,7 +22,7 @@ void HeapMerge::fillArray(DataVector &v)
 
     // sort the array to fulfull the precondition on the input
     sort(v.begin(), v.end(),
-         [] (double i, double j) { return (i < j); } // just for practice
+        [](double i, double j) { return (i < j); } // just for practice
     );
 }
 
@@ -31,7 +31,7 @@ UnitTest::TestResult HeapMerge::test()
     // collection of all the files
     vector<DataVectorPtr> files;
 
-     // offset into the vector for each file, used to keep track of what has been processed
+    // offset into the vector for each file, used to keep track of what has been processed
     vector<int> offsets;
 
     // comparison class used by the priority queue to compare elements
@@ -41,7 +41,6 @@ UnitTest::TestResult HeapMerge::test()
     priority_queue<DataPair, vector<DataPair>, decltype(comp) > q(comp);
 
     for (int i = 0; i < NumFiles; i++) {
-
         // create the file
         DataVectorPtr tmpFile(new DataVector()); // TODO clean up dynamic allocation
         files.push_back(tmpFile);
@@ -62,7 +61,6 @@ UnitTest::TestResult HeapMerge::test()
 
     // Process each record by using the priority queue to find the next minimum
     while (!q.empty()) {
-
         // extract top of the priority queue
         DataPair ip = q.top();
         q.pop();
@@ -78,8 +76,7 @@ UnitTest::TestResult HeapMerge::test()
         int offset = offsets[index];
 
         // if there are more records to process in the file
-        if ((size_t)offset < file->size()-1) {
-
+        if ((size_t)offset < file->size() - 1) {
             // get the record and increment the counter
             offset++;
             DataType value = (*file)[offset];
@@ -100,7 +97,7 @@ UnitTest::TestResult HeapMerge::test()
 
     // check the final array to see if it is sorted
     for (size_t i = 1; i < values.size(); i++) {
-        double prev = values[i-1];
+        double prev = values[i - 1];
         double curr = values[i];
         if (prev > curr)
             return FAIL;

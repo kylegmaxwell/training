@@ -6,10 +6,9 @@ BinarySearch::BinarySearch()
 {
 }
 
-
 UnitTest::TestResult BinarySearch::test()
 {
-    vector<int> data {
+    vector<int> data{
        -14,-10,2,108,108,243,285,285,285,401
     };
     vector<int> expectedResults{
@@ -55,10 +54,10 @@ size_t BinarySearch::search(std::vector<T> &values, T searchValue)
         }
 
         if (arrayValue < searchValue) {
-            left = middle+1;
+            left = middle + 1;
         }
         else { // arrayValue > searchValue
-            right = middle-1;
+            right = middle - 1;
         }
     }
     return -1;
@@ -89,7 +88,7 @@ size_t BinarySearch::searchLeft(std::vector<T> &values, size_t index)
         }
         else { // arrayValue > searchValue
             // not a match, so we can discard the middle index
-            left = middle+1;
+            left = middle + 1;
         }
     }
     return -1;

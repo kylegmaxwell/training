@@ -14,7 +14,7 @@ void MaxStack::push(int value)
 {
     int oldMax = INT_MIN;
     if (mMax.size() > 0)
-        oldMax = mMax[mMax.size()-1];
+        oldMax = mMax[mMax.size() - 1];
     int newMax = std::max<int>(oldMax, value);
 
     mStack.emplace_back(value);
@@ -29,10 +29,10 @@ int MaxStack::pop()
         return INT_MIN;
     }
 
-    int value = mStack[mStack.size()-1];
+    int value = mStack[mStack.size() - 1];
     mStack.pop_back();
 
-    int maxValue = mMax[mMax.size()-1];
+    int maxValue = mMax[mMax.size() - 1];
     mMax.pop_back();
 
     if (mVerbose) {
@@ -44,7 +44,6 @@ int MaxStack::pop()
 
 void MaxStack::getMaxValue()
 {
-
 }
 
 UnitTest::TestResult MaxStack::test()

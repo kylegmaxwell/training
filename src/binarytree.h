@@ -1,5 +1,4 @@
-#ifndef BINARYTREE_H
-#define BINARYTREE_H
+#pragma once
 
 #include <iostream>
 #include <memory>
@@ -7,7 +6,6 @@
 #include "unittest.h"
 
 class BinaryNode {
-
 public:
 
     typedef std::shared_ptr<BinaryNode> Ptr;
@@ -45,5 +43,3 @@ public:
 
     virtual TestResult test();
 };
-
-#endif // BINARYTREE_H

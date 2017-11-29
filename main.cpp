@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
         make_shared<Sorting>(),
         make_shared<Move>()
     };
-    
+
     // Run Tests
     auto status = TestSuite::test(tests);
     return status;

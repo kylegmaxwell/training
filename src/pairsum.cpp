@@ -17,7 +17,6 @@ bool PairSum::hasPairSum(PairSum::IntVec &vec, int querySum)
 
     // Move the indexes up or down until the sum is found or they cross
     while (iMin < iMax) {
-
         const int minVal = vec[iMin];
         const int maxVal = vec[iMax];
         const int currentSum = minVal + maxVal;
@@ -91,7 +90,6 @@ bool PairSum::hasThreeSumFast(PairSum::IntVec &vec, int querySum)
             else // currentSum < querySum
                 iMin++;
         }
-
     }
 
     if (mVerbose)
@@ -183,13 +181,12 @@ UnitTest::TestResult PairSum::test()
         return FAIL;
 
     for (size_t i = 0; i < data.size(); i++) {
-        for (size_t j = i+1; j < data.size(); j++) {
-            for (size_t k = j+1; k < data.size(); k++) {
-
+        for (size_t j = i + 1; j < data.size(); j++) {
+            for (size_t k = j + 1; k < data.size(); k++) {
                 if (mVerbose)
                     cout << "testing " << i << " " << j << " " << k << endl;
 
-                if (!hasThreeSum(data, data[i]+data[j]+data[k]))
+                if (!hasThreeSum(data, data[i] + data[j] + data[k]))
                     return FAIL;
             }
         }

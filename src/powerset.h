@@ -1,5 +1,4 @@
-#ifndef POWERSET_H
-#define POWERSET_H
+#pragma once
 
 #include "unittest.h"
 #include <queue>
@@ -23,7 +22,4 @@ public:
     void printSet(std::ostream &stream, StringList &set);
 
     virtual TestResult test();
-
 };
-
-#endif // POWERSET_H

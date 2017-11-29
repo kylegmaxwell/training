@@ -12,7 +12,6 @@ UnitTest::TestResult NaryTree::test()
 {
     buildTree();
 
-
     // Breadth First Search
     {
         string expectedResult = "A B C D E F G H I J K L M N ";
@@ -20,7 +19,7 @@ UnitTest::TestResult NaryTree::test()
         printBFS(ss);
 
         string result = ss.str();
-        if (mVerbose){
+        if (mVerbose) {
             cout << result << endl;
         }
         if (!stringEqual(result, expectedResult))
@@ -34,7 +33,7 @@ UnitTest::TestResult NaryTree::test()
         printDFS(ss);
 
         string result = ss.str();
-        if (mVerbose){
+        if (mVerbose) {
             cout << result << endl;
         }
         if (!stringEqual(result, expectedResult))
@@ -48,7 +47,7 @@ UnitTest::TestResult NaryTree::test()
         printDFSRecursive(ss);
 
         string result = ss.str();
-        if (mVerbose){
+        if (mVerbose) {
             cout << result << endl;
         }
         if (!stringEqual(result, expectedResult))
@@ -74,7 +73,7 @@ UnitTest::TestResult NaryTree::test()
 */
 void NaryTree::buildTree()
 {
-    unordered_map<char,TreeNode*> nodeMap;
+    unordered_map<char, TreeNode*> nodeMap;
 
     for (char c = 'A'; c <= 'N'; c++) {
         nodeMap[c] = new TreeNode(c);
@@ -165,7 +164,6 @@ TreeNode::TreeNode(char iData)
 {
     mData = iData;
 }
-
 
 void TreeNode::printData(iostream &stream)
 {

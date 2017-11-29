@@ -141,8 +141,7 @@ bool BinaryTree::isSorted(BinaryNodePtr node)
             nodeStack.push(NodeBool(n, false));
 
         if (n->mLeft && pushChildren)
-            nodeStack.push(NodeBool(n->mLeft,true));
-
+            nodeStack.push(NodeBool(n->mLeft, true));
     }
     return true;
 }
@@ -192,7 +191,6 @@ UnitTest::TestResult BinaryTree::test()
 
     return PASS;
 }
-
 
 BinaryNode::BinaryNode(int iData)
     : mData(iData), mLeft(nullptr), mRight(nullptr)

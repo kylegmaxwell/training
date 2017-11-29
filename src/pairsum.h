@@ -1,5 +1,4 @@
-#ifndef PAIRSUM_H
-#define PAIRSUM_H
+#pragma once
 
 #include "unittest.h"
 
@@ -41,5 +40,3 @@ public:
 
     ;
 };
-
-#endif // PAIRSUM_H

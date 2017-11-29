@@ -1,5 +1,4 @@
-#ifndef BINARYSEARCH_H
-#define BINARYSEARCH_H
+#pragma once
 
 #include <vector>
 #include <algorithm>
@@ -30,5 +29,3 @@ public:
     template <typename T>
     size_t searchLeft(std::vector<T> &values, size_t index);
 };
-
-#endif // BINARYSEARCH_H

@@ -5,12 +5,11 @@ using namespace std;
 
 int TestSuite::test(vector<shared_ptr<UnitTest>> tests)
 {
-    int count=0;
-    int failures=0;
+    int count = 0;
+    int failures = 0;
 
     for (auto t : tests) {
-
-        if (t->test()==UnitTest::FAIL) {
+        if (t->test() == UnitTest::FAIL) {
             cout << "X";
             failures++;
         }

@@ -8,7 +8,7 @@ DynamicProgramming::DynamicProgramming() : UnitTest(false)
 
 Combinations::Int DynamicProgramming::factorial(Combinations::Int n)
 {
-    Combinations::Int result=1;
+    Combinations::Int result = 1;
     while (n > 1) {
         result *= n;
         n--;
@@ -24,7 +24,7 @@ Combinations::Int DynamicProgramming::chooseFlawed(Combinations::Int n, Combinat
 
     // Instead of calling factorial directly try to take advantage of
     // some cancelling in the numerator and denominator
-    Combinations::Int d = n-k;
+    Combinations::Int d = n - k;
 
     Combinations::Int result = 1;
     while (n > d) {
@@ -49,11 +49,11 @@ Combinations::Int DynamicProgramming::chooseVeryFlawed(Combinations::Int n, Comb
 
 int DynamicProgramming::countPaths(const Array2D<bool> &board, Array2D<int> &cache, size_t row, size_t col)
 {
-    size_t maxR = board.getRows()-1;
-    size_t maxC = board.getCols()-1;
+    size_t maxR = board.getRows() - 1;
+    size_t maxC = board.getCols() - 1;
 
-    if ( (row == maxR) && (col == maxC ) )
-         return 1;
+    if ((row == maxR) && (col == maxC))
+        return 1;
 
     //cout << "r " << row << " c " << col << endl;
     int cachedVal = cache.getState(row, col);
@@ -109,19 +109,19 @@ UnitTest::TestResult DynamicProgramming::testChoose(Combinations &comb)
     if (mVerbose)
         comb.print();
 
-    if (comb.choose(5,5) != 1)
+    if (comb.choose(5, 5) != 1)
         return FAIL;
 
-    if (comb.choose(8,4) != 70)
+    if (comb.choose(8, 4) != 70)
         return FAIL;
 
-    if (comb.choose(8,3) != 56)
+    if (comb.choose(8, 3) != 56)
         return FAIL;
 
-    if (comb.choose(8,5) != 56)
+    if (comb.choose(8, 5) != 56)
         return FAIL;
 
-    if (comb.choose(34,19) != 1855967520)
+    if (comb.choose(34, 19) != 1855967520)
         return FAIL;
 
     return PASS;
@@ -183,7 +183,7 @@ UnitTest::TestResult DynamicProgramming::testPaths(Combinations &comb)
 
     // by leaving only one gap on the right this barrier creates a puzzle that is
     // equivalent to only having 5 rows, so its easy to compute the expected result
-    for (size_t c = 0; c < cols-1; c++) {
+    for (size_t c = 0; c < cols - 1; c++) {
         board.setState(5, c, true);
     }
 
@@ -191,7 +191,7 @@ UnitTest::TestResult DynamicProgramming::testPaths(Combinations &comb)
 
     paths = countPaths(board, cache, 0, 0);
     downs = 5 - 1;
-    expectedResult = comb.choose( overs+downs, downs );
+    expectedResult = comb.choose(overs + downs, downs);
 
     if (paths != expectedResult) {
         return FAIL;
@@ -212,7 +212,6 @@ UnitTest::TestResult DynamicProgramming::test()
 
     if (testPaths(c) == FAIL)
         return FAIL;
-
 
     return PASS;
 }
@@ -253,10 +252,9 @@ std::pair<size_t, size_t> Array2D<T>::getSize() const
     return std::pair<size_t, size_t>(mRows, mCols);
 }
 
-
 Combinations::Combinations()
 {
-    while(numRows() < 10) {
+    while (numRows() < 10) {
         addRow();
     }
 }
@@ -272,20 +270,20 @@ Combinations::~Combinations()
 
 void Combinations::addRow()
 {
-    IntVec *newRow = new IntVec(numRows()+1);
+    IntVec *newRow = new IntVec(numRows() + 1);
     cache.push_back(newRow);
 
     size_t rows = numRows();
-    if (rows==1) {
+    if (rows == 1) {
         (*newRow)[0] = 1;
     }
     else {
-        IntVec *prevRow = cache[rows-2];
+        IntVec *prevRow = cache[rows - 2];
         (*newRow)[0] = 1;
-        for (size_t j = 1; j < rows-1; j++) {
-            (*newRow)[j] = (*prevRow)[j] + (*prevRow)[j-1];
+        for (size_t j = 1; j < rows - 1; j++) {
+            (*newRow)[j] = (*prevRow)[j] + (*prevRow)[j - 1];
         }
-        (*newRow)[rows-1] = 1;
+        (*newRow)[rows - 1] = 1;
     }
 }
 
@@ -306,7 +304,7 @@ Combinations::Int Combinations::choose(Combinations::Int n, Combinations::Int k)
     // n > k
 
     // build up cache to support current evaluation
-    while ((size_t) n >= numRows()) {
+    while ((size_t)n >= numRows()) {
         addRow();
     }
 

@@ -16,12 +16,12 @@ UnitTest::TestResult Sorting::test()
     if (mVerbose)
         printVec(v);
 
-    mergeSort(v, 0, v.size()-1);
+    mergeSort(v, 0, v.size() - 1);
 
     if (mVerbose)
         printVec(v);
 
-    if (checkVec(v)==FAIL)
+    if (checkVec(v) == FAIL)
         return FAIL;
 
     return PASS;
@@ -54,7 +54,7 @@ UnitTest::TestResult Sorting::checkVec(Sorting::IntVec &v)
 void Sorting::randomVec(Sorting::IntVec &v, size_t size)
 {
     for (size_t i = 0; i < size; i++) {
-        v.push_back(rand()%1000);
+        v.push_back(rand() % 1000);
     }
 }
 
@@ -75,11 +75,11 @@ void Sorting::mergeSort(Sorting::IntVec &v, size_t L, size_t R)
 
     mergeSort(v, L, M);
 
-    mergeSort(v, M+1, R);
+    mergeSort(v, M + 1, R);
 
     // merge
     size_t l = L;
-    size_t r = M+1;
+    size_t r = M + 1;
     IntVec merged;
     // merge the minimums
     while (l <= M && r <= R) {

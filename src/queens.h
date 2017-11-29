@@ -1,5 +1,4 @@
-#ifndef QUEENS_QUEENS_H
-#define QUEENS_QUEENS_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -19,7 +18,7 @@ class Queens : public UnitTest
 public:
 
     //! Default constructor
-    Queens(bool verbose=false);
+    Queens(bool verbose = false);
 
     /*!
      * \brief Polymorphic test function inherited from Unit Test.
@@ -32,7 +31,7 @@ public:
      * \brief When a solution is found the board state is cached
      * \param b The board that was successful
      */
-    void saveBoard(Board &b, bool debug=false);
+    void saveBoard(Board &b, bool debug = false);
 
     /*!
      * \brief placeQueens calculates all possible solutions to the N Queens Problem
@@ -54,7 +53,4 @@ private:
 
     //! Total number of completed boards tested, either successful or failed
     int mCount;
-
 };
-
-#endif // QUEENS_QUEENS_H

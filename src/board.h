@@ -1,5 +1,4 @@
-#ifndef QUEENS_BOARD_H
-#define QUEENS_BOARD_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -41,7 +40,7 @@ public:
      * \param offset is how many places to skip to find the empty tile
      * \return true if a place was found
     */
-    bool findEmpty(int &row, int &col, int offset=0);
+    bool findEmpty(int &row, int &col, int offset = 0);
 
     /*!
      * \brief Place a queen in the specified row and column,
@@ -69,5 +68,3 @@ private:
     //! The index locations of where the queens have been placed
     std::vector<int> mQueens;
 };
-
-#endif // QUEENS_BOARD_H

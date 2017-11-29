@@ -11,7 +11,6 @@ ConvertBase::ConvertBase() : UnitTest(false)
 {
 }
 
-
 UnitTest::TestResult ConvertBase::test()
 {
     if (mVerbose)
@@ -20,13 +19,13 @@ UnitTest::TestResult ConvertBase::test()
     TestResult state = PASS;
     string begin = "A08";
 
-    string result = convertBase(16,begin,2);
+    string result = convertBase(16, begin, 2);
     string expectedResult = "101000001000";
-    if (!stringEqual(result,expectedResult))
+    if (!stringEqual(result, expectedResult))
         state = FAIL;
 
     string result2 = convertBase(2, result, 16);
-    if (!stringEqual(begin,result2))
+    if (!stringEqual(begin, result2))
         state = FAIL;
 
     string result3 = convertBase(16, begin, 8);
@@ -54,25 +53,25 @@ string ConvertBase::convertBase(int baseIn, string number, int baseOut)
     // check for negative and remove from string
 //TODO
 
-    std::unordered_map<char,int> charToInt;
-    std::unordered_map<int,char> intToChar;
-    for (int i =0;i<10;i++) {
-        char c = i+'0';
+    std::unordered_map<char, int> charToInt;
+    std::unordered_map<int, char> intToChar;
+    for (int i = 0; i < 10; i++) {
+        char c = i + '0';
         charToInt[c] = i;
         intToChar[i] = c;
     }
-    for (int i =0;i<6;i++) {
-        char c = i+'A';
-        charToInt[c] = i+10;
-        intToChar[i+10] = c;
+    for (int i = 0; i < 6; i++) {
+        char c = i + 'A';
+        charToInt[c] = i + 10;
+        intToChar[i + 10] = c;
     }
 
     // the value of the number string as an integer
-    int value=0;
+    int value = 0;
 
     // convert the number from a string to an int using base
     int multiplier = 1;
-    for (int i = (int)number.size()-1; i>= 0; i--) {
+    for (int i = (int)number.size() - 1; i >= 0; i--) {
         char c = number[i];
         int digitValue = charToInt[c];
         value += digitValue * multiplier;
@@ -90,7 +89,6 @@ string ConvertBase::convertBase(int baseIn, string number, int baseOut)
         numberChars.push_back(intToChar[digit]);
         multiplier *= baseOut;
     } while (shifted > 0);
-
 
     // reverse
     stringstream ss;

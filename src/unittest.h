@@ -12,7 +12,7 @@ class UnitTest
 public:
 
     //! Tests can pass or fail
-    enum TestResult {PASS, FAIL};
+    enum TestResult { PASS, FAIL };
 
     //! Constrctor for a unit test that defaults verose to true
     UnitTest(bool iVerbose = true);
@@ -27,13 +27,15 @@ protected:
 
     //! Accessor for verbose
     bool verbose() const
-    { return mVerbose; }
+    {
+        return mVerbose;
+    }
 
     /*!
      * Convenience function to compare strings and return a bool
      * @returns true when equal
      */
     static bool stringEqual(std::string a, std::string b) {
-        return a.compare(b)==0;
+        return a.compare(b) == 0;
     }
 };

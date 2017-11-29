@@ -1,5 +1,4 @@
-#ifndef NARYTREE_H
-#define NARYTREE_H
+#pragma once
 
 #include "unittest.h"
 
@@ -33,15 +32,6 @@ private:
     char mData;
 };
 
-//class Tree
-//{
-//public:
-//    Tree();
-
-
-//};
-
-
 class NaryTree : public UnitTest
 {
 public:
@@ -73,10 +63,5 @@ private:
     void printDFSRecursive(std::iostream &stream);
     void printDFSHelper(std::iostream &stream, TreeNode *n);
 
-
     //void printBroken(std::iostream &stream);
-
-
 };
-
-#endif // NARYTREE_H

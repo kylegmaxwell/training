@@ -1,5 +1,4 @@
-#ifndef LISTCYCLE_H
-#define LISTCYCLE_H
+#pragma once
 
 #include "unittest.h"
 
@@ -32,7 +31,7 @@ public:
 class ListCycle : public UnitTest
 {
 public:
-    enum CycleState {CYCLE, TERMINATES};
+    enum CycleState { CYCLE, TERMINATES };
     ListCycle();
 
     //! Check the list for cycles, which cause problems with iteration
@@ -40,5 +39,3 @@ public:
 
     virtual TestResult test();
 };
-
-#endif // LISTCYCLE_H

@@ -9,7 +9,6 @@ HashLetter::HashLetter() : UnitTest(false)
 {
 }
 
-
 UnitTest::TestResult HashLetter::test()
 {
     CharIntMap bookMap;
@@ -31,12 +30,12 @@ UnitTest::TestResult HashLetter::test()
         int letterCount = itr->second;
 
         int bookCount = bookMap[c];
-        if (letterCount > bookCount ) {
+        if (letterCount > bookCount) {
             canPrint = false;
         }
         if (mVerbose) {
             cout << "The letter needs " << letterCount << " '" << c
-                 << "'s, and the book has " << bookCount << "." << endl;
+                << "'s, and the book has " << bookCount << "." << endl;
         }
     }
     if (!canPrint)
@@ -57,13 +56,12 @@ void HashLetter::countOccurrences(CharIntMap &countMap, string s)
         else {
             countMap[c]++;
         }
-
     }
 }
 
 void HashLetter::printHistogram(CharIntMap &map)
 {
-    typedef pair<char,int> CharInt;
+    typedef pair<char, int> CharInt;
     vector<CharInt> histogram;
 
     for (auto itr = map.begin(); itr != map.end(); itr++) {
@@ -75,12 +73,12 @@ void HashLetter::printHistogram(CharIntMap &map)
 
     // Sort the vector by number of occurrences
     sort(histogram.begin(), histogram.end(),
-        [] (const CharInt &a, const CharInt &b) { return a.second < b.second; }
+        [](const CharInt &a, const CharInt &b) { return a.second < b.second; }
     );
 
     // Print the sorted vector
     for (auto itr = histogram.begin(); itr != histogram.end(); itr++) {
         pair<char, int> p = *itr;
-            cout << p.first << ": " << p.second << endl;
+        cout << p.first << ": " << p.second << endl;
     }
 }

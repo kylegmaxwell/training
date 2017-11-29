@@ -1,5 +1,4 @@
-#ifndef CONVERTBASE_H
-#define CONVERTBASE_H
+#pragma once
 
 #include "unittest.h"
 #include <iostream>
@@ -22,5 +21,3 @@ private:
      */
     std::string convertBase(int baseIn, std::string number, int baseOut);
 };
-
-#endif // CONVERTBASE_H

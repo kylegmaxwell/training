@@ -1,12 +1,12 @@
 #include <utility>
-#include <exception> 
+#include <exception>
 
 #include "move.h"
 #include "os.h"
 
 using namespace std;
 
-UnitTest::TestResult Move::test() 
+UnitTest::TestResult Move::test()
 {
     int COUNT = 1000;
     // Create some data
@@ -17,7 +17,7 @@ UnitTest::TestResult Move::test()
     Move m2(m1);
     if (!m1.values.size() == COUNT) return FAIL;
     if (!m2.values.size() == COUNT) return FAIL;
-    
+
     // Move construct
     Move m3(std::move(m1));
     if (!m1.values.size() == 0) return FAIL;
@@ -70,7 +70,7 @@ Move::Move(Move && rhs)
 
 // copy assign
 Move & Move::operator=(const Move & rhs)
-{  
+{
     DEBUG_PRINT("copy assign");
     values = rhs.values;
     return *this;

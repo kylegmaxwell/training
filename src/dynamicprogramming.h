@@ -1,5 +1,4 @@
-#ifndef DYNAMICPROGRAMMING_H
-#define DYNAMICPROGRAMMING_H
+#pragma once
 
 #include <vector>
 
@@ -40,7 +39,6 @@ private:
 
     //! The elements of the board
     std::vector<T> mEntries;
-
 };
 
 /*!
@@ -77,8 +75,6 @@ private:
     // Adds a row to the cache allowing a value of n one higher to be evaluated
     // Dynamically allocates an IntVec with memory managed interally to this class
     void addRow();
-
-
 };
 
 class DynamicProgramming : public UnitTest
@@ -113,5 +109,3 @@ public:
 
     virtual TestResult test();
 };
-
-#endif // DYNAMICPROGRAMMING_H

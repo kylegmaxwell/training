@@ -1,5 +1,4 @@
-#ifndef MAXSTACK_H
-#define MAXSTACK_H
+#pragma once
 
 #include "unittest.h"
 
@@ -28,8 +27,4 @@ public:
 
     IntVec mStack;
     IntVec mMax;
-
-
 };
-
-#endif // MAXSTACK_H

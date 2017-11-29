@@ -1,11 +1,9 @@
-#ifndef SORTING_H
-#define SORTING_H
+#pragma once
 
 #include "unittest.h"
 
 #include <vector>
 #include <cstdlib> // rand
-
 
 class Sorting : public UnitTest
 {
@@ -31,7 +29,6 @@ private:
     //! populate a random vector
     void randomVec(IntVec &v, size_t size);
 
-
     /*!
      * \brief mergeSort sort using divide and conquer
      * \param v vector to sort
@@ -40,5 +37,3 @@ private:
      */
     void mergeSort(IntVec &v, size_t L, size_t R);
 };
-
-#endif // SORTING_H

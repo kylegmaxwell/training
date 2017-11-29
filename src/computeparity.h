@@ -1,5 +1,4 @@
-#ifndef COMPUTEPARITY_H
-#define COMPUTEPARITY_H
+#pragma once
 
 #include "unittest.h"
 
@@ -14,5 +13,3 @@ public:
 
     virtual TestResult test();
 };
-
-#endif // COMPUTEPARITY_H

@@ -1,5 +1,4 @@
-#ifndef HEAPMERGE_H
-#define HEAPMERGE_H
+#pragma once
 
 #include "unittest.h"
 #include <vector>
@@ -43,5 +42,3 @@ public:
     //! Run the unit test simulation
     virtual TestResult test();
 };
-
-#endif // HEAPMERGE_H

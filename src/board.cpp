@@ -5,9 +5,9 @@
 using namespace std;
 
 Board::Board(int size) : mSize(size),
-    mEntries(size*size, EMPTY),
-    mNumEmpty(size*size),
-    mQueens()
+mEntries(size*size, EMPTY),
+mNumEmpty(size*size),
+mQueens()
 {
 }
 
@@ -42,9 +42,8 @@ void Board::printFull(std::ostream &stream)
     // Iterate over entire board
     for (int r = 0; r < mSize; r++) {
         for (int c = 0; c < mSize; c++) {
-
             // Select the appropriate character for the square
-            switch(getState(r,c)) {
+            switch (getState(r, c)) {
             case QUEEN: {
                 stream << "Q";
                 break;
@@ -67,7 +66,6 @@ void Board::printFull(std::ostream &stream)
 }
 
 void Board::printQueens(std::ostream &stream) {
-
     // Sort so that equivalent solutions compare equal as strings
     std::sort(mQueens.begin(), mQueens.end());
 
@@ -83,10 +81,8 @@ bool Board::findEmpty(int &row, int &col, int offset)
 {
     for (int r = 0; r < mSize; r++) {
         for (int c = 0; c < mSize; c++) {
-
             // check if an empty cell has been found
-            if (getState(r,c) == EMPTY ) {
-
+            if (getState(r, c) == EMPTY) {
                 // Check whether to select this empty cell
                 if (offset == 0) {
                     row = r;
@@ -121,12 +117,12 @@ void Board::placeQueen(int row, int col)
     // bishop
 
     // first diagonal
-    int pMin = std::min<int>(row,col);
+    int pMin = std::min<int>(row, col);
     int r0 = row - pMin;
     int c0 = col - pMin;
 
-    while (r0 < mSize && c0 < mSize ) {
-        setState(r0,c0,ATTACKED);
+    while (r0 < mSize && c0 < mSize) {
+        setState(r0, c0, ATTACKED);
         r0++;
         c0++;
     }
