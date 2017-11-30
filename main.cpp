@@ -17,6 +17,7 @@
 #include "src/heapmerge.h"
 #include "src/powerset.h"
 #include "src/move.h"
+#include "src/logger.h"
 
 using namespace std;
 
@@ -46,6 +47,5 @@ int main(int argc, char *argv[])
     };
 
     // Run Tests
-    auto status = TestSuite::test(tests);
-    return status;
+    return TestSuite::test(tests);
 }

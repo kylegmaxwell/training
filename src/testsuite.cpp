@@ -1,6 +1,8 @@
 #include "testsuite.h"
-
+#include "logger.h"
+#include <sstream>
 #include <iostream>
+
 using namespace std;
 
 int TestSuite::test(vector<shared_ptr<UnitTest>> tests)
@@ -8,22 +10,24 @@ int TestSuite::test(vector<shared_ptr<UnitTest>> tests)
     int count = 0;
     int failures = 0;
 
-    for (auto t : tests) {
+    for (const auto t : tests) {
         if (t->test() == UnitTest::FAIL) {
-            cout << "X";
+            Logger::DEBUG_WORD("X");
             failures++;
         }
         else { // pass
-            cout << ".";
+            Logger::DEBUG_WORD(".");
         }
         count++;
     }
+    Logger::ENDL();
 
-    cout << endl;
-
-    cout << failures << " failure";
+    stringstream ss;
+    ss << failures << " failure";
     if (failures != 1)
-        cout << "s";
-    cout << endl;
+        ss << "s";
+
+    Logger::DEBUG(ss.str());
+
     return failures == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
