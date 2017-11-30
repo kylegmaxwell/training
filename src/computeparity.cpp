@@ -2,12 +2,8 @@
 #include <iostream>
 using namespace std;
 
-ComputeParity::ComputeParity() : UnitTest(false)
-{
-}
-
 int ComputeParity::computeParity(int value) {
-    if (verbose())
+    if (mVerbose)
         cout << value << endl;
     bool even = true;
     int bits = sizeof(value) * 8;
@@ -17,10 +13,10 @@ int ComputeParity::computeParity(int value) {
         if (bit)
             even = !even;
         tmpValue = tmpValue >> 1;
-        if (verbose())
+        if (mVerbose)
             cout << bit;
     }
-    if (verbose()) {
+    if (mVerbose) {
         cout << endl;
         if (even)
             cout << "Even" << endl;
@@ -36,7 +32,7 @@ int ComputeParity::computeParity(int value) {
 
 UnitTest::TestResult ComputeParity::test()
 {
-    if (verbose())
+    if (mVerbose)
         cout << "ComputeParity running test" << endl;
 
     int expectedResult[10] = { 0,1,1,0,1,0,0,1,1,0 };

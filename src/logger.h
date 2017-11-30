@@ -23,7 +23,7 @@ public:
     template <typename T>
     static void DEBUG(T in) {
         std::stringstream ss;
-        ss << in << endl;
+        ss << in << std::endl;
         DEBUG_WORD(ss.str());
     }
 

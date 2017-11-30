@@ -5,10 +5,6 @@
 
 using namespace std;
 
-PairSum::PairSum() : UnitTest(false)
-{
-}
-
 bool PairSum::hasPairSum(PairSum::IntVec &vec, int querySum)
 {
     // Initialize an index at the start and end of the array

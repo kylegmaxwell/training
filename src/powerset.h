@@ -11,8 +11,6 @@
 class PowerSet : public UnitTest
 {
 public:
-    PowerSet();
-
     typedef std::vector<std::string> StringList;
 
     void makePowerSetRecursive(StringList startSet, std::string element, StringList &powerSet);

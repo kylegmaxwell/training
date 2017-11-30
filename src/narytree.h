@@ -35,8 +35,6 @@ private:
 class NaryTree : public UnitTest
 {
 public:
-    NaryTree();
-
     virtual TestResult test();
 
 private:

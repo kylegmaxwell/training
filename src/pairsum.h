@@ -10,8 +10,6 @@ class PairSum : public UnitTest
 public:
     typedef std::vector<int> IntVec;
 
-    PairSum();
-
     /*!
      * \brief hasPairSum Checks to see if there are any two integers that sum to the given value.
      * Assumes input vector is sorted.

@@ -17,9 +17,6 @@ class Queens : public UnitTest
 {
 public:
 
-    //! Default constructor
-    Queens(bool verbose = false);
-
     /*!
      * \brief Polymorphic test function inherited from Unit Test.
      * Runs the queens problem on different board sizes and
@@ -49,8 +46,8 @@ public:
 private:
 
     //! set of working solutions, used to remove exact duplicates
-    std::unordered_set<std::string> mSet;
+    std::unordered_set<std::string> mSet{};
 
     //! Total number of completed boards tested, either successful or failed
-    int mCount;
+    int mCount{ 0 };
 };

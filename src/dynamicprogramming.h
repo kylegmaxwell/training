@@ -80,9 +80,6 @@ private:
 class DynamicProgramming : public UnitTest
 {
 public:
-
-    DynamicProgramming();
-
     //Note: factorial is not implemented with or used for the dynamic programming algorithm at this time
     // factorial used to compute expected result when no barriers are present
     Combinations::Int factorial(Combinations::Int n);

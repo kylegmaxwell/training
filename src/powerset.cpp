@@ -2,10 +2,6 @@
 
 using namespace std;
 
-PowerSet::PowerSet() : UnitTest(false)
-{
-}
-
 void PowerSet::makePowerSetRecursive(StringList startSet, string element, StringList &powerSet)
 {
     if (startSet.empty()) {

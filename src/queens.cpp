@@ -4,10 +4,6 @@
 
 using namespace std;
 
-Queens::Queens(bool verbose) : UnitTest(verbose), mSet(), mCount(0)
-{
-}
-
 UnitTest::TestResult Queens::test()
 {
     const int MAX_BOARD_SIZE = 5;

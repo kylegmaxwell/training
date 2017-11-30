@@ -33,7 +33,7 @@ public:
     typedef std::vector<DataType> DataVector;
     typedef std::shared_ptr<DataVector> DataVectorPtr;
 
-    // Constructor
+    // Constructor (sets random seed)
     HeapMerge();
 
     //! Fill an array to represent the data recorded in the file

@@ -14,22 +14,13 @@ public:
     //! Tests can pass or fail
     enum TestResult { PASS, FAIL };
 
-    //! Constrctor for a unit test that defaults verose to true
-    UnitTest(bool iVerbose = true);
-
     //! Overridable test function to be implemented by test classes
     virtual TestResult test();
 
 protected:
 
     //! Wheter to print extra logging information
-    bool mVerbose;
-
-    //! Accessor for verbose
-    bool verbose() const
-    {
-        return mVerbose;
-    }
+    bool mVerbose{ false };
 
     /*!
      * Convenience function to compare strings and return a bool

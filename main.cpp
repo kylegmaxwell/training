@@ -1,7 +1,9 @@
 #include <iostream>
+#include <vector>
+#include <memory>
 
-#include "src/computeparity.h"
 #include "src/unittest.h"
+#include "src/computeparity.h"
 #include "src/testsuite.h"
 #include "src/narytree.h"
 #include "src/convertbase.h"
@@ -27,23 +29,29 @@ using namespace std;
  */
 int main(int argc, char *argv[])
 {
-    // Initialize test suite
-    vector<shared_ptr<UnitTest>> tests = {
-        make_shared<Queens>(),
-        make_shared<DynamicProgramming>(),
-        make_shared<ComputeParity>(),
-        make_shared<NaryTree>(),
-        make_shared<ConvertBase>(),
-        make_shared<ListCycle>(),
-        make_shared<PairSum>(),
-        make_shared<MaxStack>(),
-        make_shared<BinaryTree>(),
-        make_shared<HeapMerge>(),
-        make_shared<BinarySearch>(),
-        make_shared<HashLetter>(),
-        make_shared<PowerSet>(),
-        make_shared<Sorting>(),
-        make_shared<Move>()
+    // Initialize as array since initializer_list must copy, but unique_ptr can only move
+    unique_ptr<UnitTest> testList[] = {
+        make_unique<Queens>(),
+        make_unique<DynamicProgramming>(),
+        make_unique<ComputeParity>(),
+        make_unique<NaryTree>(),
+        make_unique<ConvertBase>(),
+        make_unique<ListCycle>(),
+        make_unique<PairSum>(),
+        make_unique<MaxStack>(),
+        make_unique<BinaryTree>(),
+        make_unique<HeapMerge>(),
+        make_unique<BinarySearch>(),
+        make_unique<HashLetter>(),
+        make_unique<PowerSet>(),
+        make_unique<Sorting>(),
+        make_unique<Move>()
+    };
+
+    // Convert array to vector
+    vector<unique_ptr<UnitTest>> tests{
+        make_move_iterator(begin(testList)),
+        make_move_iterator(end(testList))
     };
 
     // Run Tests

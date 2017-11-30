@@ -26,8 +26,6 @@ typedef BinaryNode::Ptr BinaryNodePtr;
 class BinaryTree : public UnitTest
 {
 public:
-    BinaryTree();
-
     BinaryNodePtr buildUnbalancedTree();
     BinaryNodePtr buildBalancedTree();
 

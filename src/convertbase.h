@@ -7,8 +7,6 @@
 class ConvertBase : public UnitTest
 {
 public:
-    ConvertBase();
-
     virtual TestResult test();
 
 private:

@@ -14,8 +14,6 @@ public:
     const static std::string Book;
     const static std::string Letter;
 
-    HashLetter();
-
     virtual TestResult test();
 
     /*!

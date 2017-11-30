@@ -15,5 +15,5 @@ public:
      * Run all the tests that have been added
      * @returns status code
      */
-    static int test(std::vector<std::shared_ptr<UnitTest>> tests);
+    static int test(const std::vector<std::unique_ptr<UnitTest>> &tests);
 };

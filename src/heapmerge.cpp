@@ -5,7 +5,7 @@ using namespace std;
 const int HeapMerge::NumFiles(123);
 const int HeapMerge::ArraySize(100);
 
-HeapMerge::HeapMerge() : UnitTest(false)
+HeapMerge::HeapMerge()
 {
     // Initialize the random number generator for consistent results
     srand(0);

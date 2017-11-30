@@ -4,12 +4,6 @@
 
 using namespace std;
 
-MaxStack::MaxStack() : UnitTest(false)
-{
-    mStack.clear();
-    mMax.clear();
-}
-
 void MaxStack::push(int value)
 {
     int oldMax = INT_MIN;

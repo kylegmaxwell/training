@@ -7,10 +7,6 @@
 
 using namespace std;
 
-ConvertBase::ConvertBase() : UnitTest(false)
-{
-}
-
 UnitTest::TestResult ConvertBase::test()
 {
     if (mVerbose)

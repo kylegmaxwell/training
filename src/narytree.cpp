@@ -4,10 +4,6 @@
 
 using namespace std;
 
-NaryTree::NaryTree() : UnitTest(false)
-{
-}
-
 UnitTest::TestResult NaryTree::test()
 {
     buildTree();

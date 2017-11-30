@@ -7,9 +7,7 @@
 class MaxStack : public UnitTest
 {
 public:
-    typedef std::vector<int> IntVec;
-
-    MaxStack();
+    using IntVec = std::vector<int>;
 
     /*!
      * \brief push Add a new value to the top of the stack, and compute the max
@@ -25,6 +23,6 @@ public:
 
     virtual TestResult test();
 
-    IntVec mStack;
-    IntVec mMax;
+    IntVec mStack{};
+    IntVec mMax{};
 };

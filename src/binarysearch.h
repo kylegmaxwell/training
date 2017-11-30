@@ -8,9 +8,6 @@
 class BinarySearch : public UnitTest
 {
 public:
-
-    BinarySearch();
-
     virtual TestResult test();
 
     /*!

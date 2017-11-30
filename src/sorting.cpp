@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Sorting::Sorting() : UnitTest(false)
+Sorting::Sorting()
 {
     srand(0);
 }

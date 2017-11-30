@@ -2,10 +2,6 @@
 
 using namespace std;
 
-DynamicProgramming::DynamicProgramming() : UnitTest(false)
-{
-}
-
 Combinations::Int DynamicProgramming::factorial(Combinations::Int n)
 {
     Combinations::Int result = 1;

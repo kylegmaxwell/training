@@ -32,7 +32,6 @@ class ListCycle : public UnitTest
 {
 public:
     enum CycleState { CYCLE, TERMINATES };
-    ListCycle();
 
     //! Check the list for cycles, which cause problems with iteration
     CycleState findCycle(ListNode *n);

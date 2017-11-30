@@ -2,10 +2,6 @@
 
 using namespace std;
 
-BinarySearch::BinarySearch()
-{
-}
-
 UnitTest::TestResult BinarySearch::test()
 {
     vector<int> data{

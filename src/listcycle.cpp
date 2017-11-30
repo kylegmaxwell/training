@@ -2,10 +2,6 @@
 
 using namespace std;
 
-ListCycle::ListCycle() : UnitTest(false)
-{
-}
-
 ListCycle::CycleState ListCycle::findCycle(ListNode *n)
 {
     unordered_map<ListNode*, char> nodes;
