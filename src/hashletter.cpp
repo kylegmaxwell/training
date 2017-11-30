@@ -1,4 +1,5 @@
 #include "hashletter.h"
+#include <vector>
 
 using namespace std;
 

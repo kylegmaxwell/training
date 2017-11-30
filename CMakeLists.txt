@@ -19,4 +19,4 @@ file(GLOB SOURCE_FILES
     "src/*.cpp"
 )
 
-add_executable(training main.cpp ${OSURCE_FILES})
+add_executable(training main.cpp ${SOURCE_FILES})
