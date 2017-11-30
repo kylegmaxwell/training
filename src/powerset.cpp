@@ -81,7 +81,7 @@ UnitTest::TestResult PowerSet::test()
     stringstream ss1;
     printSet(ss1, powerSet1);
     if (!stringEqual(ss1.str(), expectedResult))
-        return FAIL;
+        return TestResult::FAIL;
 
     StringList powerSet2;
     makePowerSetRecursive(startSet, "", powerSet2);
@@ -89,7 +89,7 @@ UnitTest::TestResult PowerSet::test()
     stringstream ss2;
     printSet(ss2, powerSet2);
     if (!stringEqual(ss2.str(), expectedResult))
-        return FAIL;
+        return TestResult::FAIL;
 
-    return PASS;
+    return TestResult::PASS;
 }

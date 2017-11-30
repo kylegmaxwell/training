@@ -14,8 +14,6 @@ public:
 
     BinaryNode(int iData, BinaryNode *iLeft, BinaryNode *iRight);
 
-    virtual ~BinaryNode();
-
     int mData;
     Ptr mLeft;
     Ptr mRight;
@@ -39,5 +37,5 @@ public:
     bool isSorted(BinaryNodePtr node);
     bool isSortedRecursive(BinaryNodePtr node, int &prev);
 
-    virtual TestResult test();
+    virtual TestResult test() override;
 };

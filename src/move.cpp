@@ -10,28 +10,28 @@ UnitTest::TestResult Move::test()
     int COUNT = 1000;
     // Create some data
     Move m1(COUNT);
-    if (!m1.values.size() == COUNT) return FAIL;
+    if (!m1.values.size() == COUNT) return TestResult::FAIL;
 
     // Copy construct
     Move m2(m1);
-    if (!m1.values.size() == COUNT) return FAIL;
-    if (!m2.values.size() == COUNT) return FAIL;
+    if (!m1.values.size() == COUNT) return TestResult::FAIL;
+    if (!m2.values.size() == COUNT) return TestResult::FAIL;
 
     // Move construct
     Move m3(std::move(m1));
-    if (!m1.values.size() == 0) return FAIL;
-    if (!m2.values.size() == COUNT) return FAIL;
-    if (!m3.values.size() == COUNT) return FAIL;
+    if (!m1.values.size() == 0) return TestResult::FAIL;
+    if (!m2.values.size() == COUNT) return TestResult::FAIL;
+    if (!m3.values.size() == COUNT) return TestResult::FAIL;
 
     m3 = move(m2);
-    if (!m2.values.size() == 0) return FAIL;
-    if (!m3.values.size() == COUNT) return FAIL;
+    if (!m2.values.size() == 0) return TestResult::FAIL;
+    if (!m3.values.size() == COUNT) return TestResult::FAIL;
 
     m2 = m3;
-    if (!m2.values.size() == COUNT) return FAIL;
-    if (!m3.values.size() == COUNT) return FAIL;
+    if (!m2.values.size() == COUNT) return TestResult::FAIL;
+    if (!m3.values.size() == COUNT) return TestResult::FAIL;
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 // ctor

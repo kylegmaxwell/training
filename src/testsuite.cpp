@@ -11,7 +11,7 @@ int TestSuite::test(const vector<unique_ptr<UnitTest>> &tests)
     int failures = 0;
 
     for (const auto &t : tests) {
-        if (t->test() == UnitTest::FAIL) {
+        if (t->test() == UnitTest::TestResult::FAIL) {
             Logger::DEBUG_WORD("X");
             failures++;
         }

@@ -47,13 +47,13 @@ UnitTest::TestResult MaxStack::test()
     push(5);
 
     if (pop() != 7)
-        return FAIL;
+        return TestResult::FAIL;
 
     if (pop() != 7)
-        return FAIL;
+        return TestResult::FAIL;
 
     if (pop() != 2)
-        return FAIL;
+        return TestResult::FAIL;
 
-    return PASS;
+    return TestResult::PASS;
 }

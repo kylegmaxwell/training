@@ -8,7 +8,7 @@
 class BinarySearch : public UnitTest
 {
 public:
-    virtual TestResult test();
+    virtual TestResult test() override;
 
     /*!
      * \brief Search for the index of the given value.

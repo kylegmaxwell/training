@@ -2,5 +2,5 @@
 
 UnitTest::TestResult UnitTest::test()
 {
-    return FAIL;
+    return TestResult::FAIL;
 }

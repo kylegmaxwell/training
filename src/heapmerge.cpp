@@ -90,7 +90,7 @@ UnitTest::TestResult HeapMerge::test()
 
     // check to make sure all the records were processed
     if (values.size() != NumFiles * ArraySize)
-        return FAIL;
+        return TestResult::FAIL;
 
     if (mVerbose)
         cout << values.size() << endl;
@@ -100,8 +100,8 @@ UnitTest::TestResult HeapMerge::test()
         double prev = values[i - 1];
         double curr = values[i];
         if (prev > curr)
-            return FAIL;
+            return TestResult::FAIL;
     }
 
-    return PASS;
+    return TestResult::PASS;
 }

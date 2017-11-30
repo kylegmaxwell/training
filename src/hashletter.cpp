@@ -36,9 +36,9 @@ UnitTest::TestResult HashLetter::test()
         }
     }
     if (!canPrint)
-        return FAIL;
+        return TestResult::FAIL;
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 void HashLetter::countOccurrences(CharIntMap &countMap, string s)

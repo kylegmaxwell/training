@@ -5,7 +5,7 @@
 using namespace std;
 
 Board::Board(int size) : mSize(size),
-mEntries(size*size, EMPTY),
+mEntries(size*size, TileState::EMPTY),
 mNumEmpty(size*size),
 mQueens()
 {
@@ -15,16 +15,16 @@ void Board::setState(int row, int col, Board::TileState state)
 {
     TileState oldState = getState(row, col);
     // Never overwrite queen
-    if (oldState == QUEEN)
+    if (oldState == TileState::QUEEN)
         return;
 
     // An empty tile is filled
-    if ((state == QUEEN || state == ATTACKED) && (oldState == EMPTY)) {
+    if ((state == TileState::QUEEN || state == TileState::ATTACKED) && (oldState == TileState::EMPTY)) {
         mNumEmpty--;
     }
 
     // A new queen has been placed, record it
-    if (state == QUEEN && oldState != QUEEN)
+    if (state == TileState::QUEEN && oldState != TileState::QUEEN)
         mQueens.push_back(row * mSize + col);
 
     // Set the actual value in the array, convert from two to one dimensional indexing
@@ -44,15 +44,15 @@ void Board::printFull(std::ostream &stream)
         for (int c = 0; c < mSize; c++) {
             // Select the appropriate character for the square
             switch (getState(r, c)) {
-            case QUEEN: {
+            case TileState::QUEEN: {
                 stream << "Q";
                 break;
             }
-            case ATTACKED: {
+            case TileState::ATTACKED: {
                 stream << "x";
                 break;
             }
-            case EMPTY:
+            case TileState::EMPTY:
             default: {
                 stream << ".";
                 break;
@@ -82,7 +82,7 @@ bool Board::findEmpty(int &row, int &col, int offset)
     for (int r = 0; r < mSize; r++) {
         for (int c = 0; c < mSize; c++) {
             // check if an empty cell has been found
-            if (getState(r, c) == EMPTY) {
+            if (getState(r, c) == TileState::EMPTY) {
                 // Check whether to select this empty cell
                 if (offset == 0) {
                     row = r;
@@ -101,17 +101,17 @@ bool Board::findEmpty(int &row, int &col, int offset)
 void Board::placeQueen(int row, int col)
 {
     // setState will not overwrite cells set to Queen
-    setState(row, col, QUEEN);
+    setState(row, col, TileState::QUEEN);
 
     // rook
 
     // attack row
     for (int r = 0; r < mSize; r++) {
-        setState(r, col, ATTACKED);
+        setState(r, col, TileState::ATTACKED);
     }
     // attack col
     for (int c = 0; c < mSize; c++) {
-        setState(row, c, ATTACKED);
+        setState(row, c, TileState::ATTACKED);
     }
 
     // bishop
@@ -122,7 +122,7 @@ void Board::placeQueen(int row, int col)
     int c0 = col - pMin;
 
     while (r0 < mSize && c0 < mSize) {
-        setState(r0, c0, ATTACKED);
+        setState(r0, c0, TileState::ATTACKED);
         r0++;
         c0++;
     }
@@ -131,14 +131,14 @@ void Board::placeQueen(int row, int col)
     r0 = row - 1;
     c0 = col + 1;
     while (r0 >= 0 && c0 < mSize) {
-        setState(r0, c0, ATTACKED);
+        setState(r0, c0, TileState::ATTACKED);
         r0--;
         c0++;
     }
     r0 = row + 1;
     c0 = col - 1;
     while (r0 < mSize && c0 >= 0) {
-        setState(r0, c0, ATTACKED);
+        setState(r0, c0, TileState::ATTACKED);
         r0++;
         c0--;
     }

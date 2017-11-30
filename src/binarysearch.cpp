@@ -17,20 +17,20 @@ UnitTest::TestResult BinarySearch::test()
         auto index = BinarySearch::search(data, data[i]);
         // The item in the list should always be found
         if (index == -1)
-            return FAIL;
+            return TestResult::FAIL;
 
         // Find the left most occurrence of the item
         auto leftIndex = searchLeft(data, index);
 
         if (leftIndex != expectedResults[i]) {
-            return FAIL;
+            return TestResult::FAIL;
         }
     }
 
     if (BinarySearch::search(data, 0) != -1)
-        return FAIL;
+        return TestResult::FAIL;
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 template <typename T>

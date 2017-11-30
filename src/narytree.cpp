@@ -19,7 +19,7 @@ UnitTest::TestResult NaryTree::test()
             cout << result << endl;
         }
         if (!stringEqual(result, expectedResult))
-            return FAIL;
+            return TestResult::FAIL;
     }
 
     // Depth First Search
@@ -33,7 +33,7 @@ UnitTest::TestResult NaryTree::test()
             cout << result << endl;
         }
         if (!stringEqual(result, expectedResult))
-            return FAIL;
+            return TestResult::FAIL;
     }
 
     // Depth First Search Recursive
@@ -47,10 +47,10 @@ UnitTest::TestResult NaryTree::test()
             cout << result << endl;
         }
         if (!stringEqual(result, expectedResult))
-            return FAIL;
+            return TestResult::FAIL;
     }
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 /* Structure

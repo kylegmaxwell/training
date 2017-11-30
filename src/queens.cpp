@@ -27,10 +27,10 @@ UnitTest::TestResult Queens::test()
 
         // Report any errors
         if (solutions != expectedSolutions[i])
-            return FAIL;
+            return TestResult::FAIL;
     }
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 void Queens::saveBoard(Board &b, bool verbose)

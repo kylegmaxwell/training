@@ -104,5 +104,5 @@ public:
     //! Run the dynamic programming exercise
     TestResult testPaths(Combinations &comb);
 
-    virtual TestResult test();
+    virtual TestResult test() override;
 };

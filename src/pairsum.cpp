@@ -153,10 +153,10 @@ UnitTest::TestResult PairSum::test()
     sort(values.begin(), values.end());
 
     if (hasPairSum(values, 50))
-        return FAIL;
+        return TestResult::FAIL;
 
     if (!hasPairSum(values, 112))
-        return FAIL;
+        return TestResult::FAIL;
 
     IntVec data;
     data.push_back(-14);//
@@ -171,10 +171,10 @@ UnitTest::TestResult PairSum::test()
     data.push_back(401);
 
     if (hasThreeSum(data, 0))
-        return FAIL;
+        return TestResult::FAIL;
 
     if (!hasThreeSum(data, 100))
-        return FAIL;
+        return TestResult::FAIL;
 
     for (size_t i = 0; i < data.size(); i++) {
         for (size_t j = i + 1; j < data.size(); j++) {
@@ -183,9 +183,9 @@ UnitTest::TestResult PairSum::test()
                     cout << "testing " << i << " " << j << " " << k << endl;
 
                 if (!hasThreeSum(data, data[i] + data[j] + data[k]))
-                    return FAIL;
+                    return TestResult::FAIL;
             }
         }
     }
-    return PASS;
+    return TestResult::PASS;
 }

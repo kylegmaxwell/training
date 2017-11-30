@@ -21,10 +21,10 @@ UnitTest::TestResult Sorting::test()
     if (mVerbose)
         printVec(v);
 
-    if (checkVec(v) == FAIL)
-        return FAIL;
+    if (checkVec(v) == TestResult::FAIL)
+        return TestResult::FAIL;
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 void Sorting::swapVec(Sorting::IntVec &v, size_t L, size_t R)
@@ -46,9 +46,9 @@ UnitTest::TestResult Sorting::checkVec(Sorting::IntVec &v)
     int prev = INT_MIN;
     for (auto itr = v.begin(); itr != v.end(); itr++) {
         if (*itr < prev)
-            return FAIL;
+            return TestResult::FAIL;
     }
-    return PASS;
+    return TestResult::PASS;
 }
 
 void Sorting::randomVec(Sorting::IntVec &v, size_t size)

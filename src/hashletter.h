@@ -14,7 +14,7 @@ public:
     const static std::string Book;
     const static std::string Letter;
 
-    virtual TestResult test();
+    virtual TestResult test() override;
 
     /*!
      * \brief countOccurrences Count the number of occurrences of each character in the given string using the map

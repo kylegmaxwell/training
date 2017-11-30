@@ -11,8 +11,11 @@ class UnitTest
 {
 public:
 
+    // Allow child classes to override destructor if needed
+    virtual ~UnitTest() = default;
+
     //! Tests can pass or fail
-    enum TestResult { PASS, FAIL };
+    enum class TestResult { PASS, FAIL };
 
     //! Overridable test function to be implemented by test classes
     virtual TestResult test();

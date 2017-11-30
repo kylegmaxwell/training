@@ -40,5 +40,5 @@ public:
     void fillArray(DataVector &v);
 
     //! Run the unit test simulation
-    virtual TestResult test();
+    virtual TestResult test() override;
 };

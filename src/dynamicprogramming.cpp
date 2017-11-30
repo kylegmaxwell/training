@@ -94,10 +94,10 @@ UnitTest::TestResult DynamicProgramming::testFactorial()
         if (mVerbose)
             cout << fact << endl;
         if (fact != expectedResults[i])
-            return FAIL;
+            return TestResult::FAIL;
     }
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 UnitTest::TestResult DynamicProgramming::testChoose(Combinations &comb)
@@ -106,21 +106,21 @@ UnitTest::TestResult DynamicProgramming::testChoose(Combinations &comb)
         comb.print();
 
     if (comb.choose(5, 5) != 1)
-        return FAIL;
+        return TestResult::FAIL;
 
     if (comb.choose(8, 4) != 70)
-        return FAIL;
+        return TestResult::FAIL;
 
     if (comb.choose(8, 3) != 56)
-        return FAIL;
+        return TestResult::FAIL;
 
     if (comb.choose(8, 5) != 56)
-        return FAIL;
+        return TestResult::FAIL;
 
     if (comb.choose(34, 19) != 1855967520)
-        return FAIL;
+        return TestResult::FAIL;
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 UnitTest::TestResult DynamicProgramming::testPaths(Combinations &comb)
@@ -162,7 +162,7 @@ UnitTest::TestResult DynamicProgramming::testPaths(Combinations &comb)
     if (paths != expectedResult) {
         if (mVerbose)
             cout << "expected " << expectedResult << endl;
-        return FAIL;
+        return TestResult::FAIL;
     }
 
     //---- Test with barriers set
@@ -190,26 +190,26 @@ UnitTest::TestResult DynamicProgramming::testPaths(Combinations &comb)
     expectedResult = comb.choose(overs + downs, downs);
 
     if (paths != expectedResult) {
-        return FAIL;
+        return TestResult::FAIL;
     }
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 UnitTest::TestResult DynamicProgramming::test()
 {
-    if (testFactorial() == FAIL)
-        return FAIL;
+    if (testFactorial() == TestResult::FAIL)
+        return TestResult::FAIL;
 
     Combinations c;
 
-    if (testChoose(c) == FAIL)
-        return FAIL;
+    if (testChoose(c) == TestResult::FAIL)
+        return TestResult::FAIL;
 
-    if (testPaths(c) == FAIL)
-        return FAIL;
+    if (testPaths(c) == TestResult::FAIL)
+        return TestResult::FAIL;
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 template <class T>

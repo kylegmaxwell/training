@@ -34,7 +34,7 @@ public:
 
     size_t binarySearch(IntVec &values, int searchValue, size_t firstIndex, size_t lastIndex, int &closest, size_t &closestIdx);
 
-    virtual TestResult test();
+    virtual TestResult test() override;
 
     ;
 };

@@ -13,7 +13,7 @@ public:
 
     Sorting();
 
-    virtual TestResult test();
+    virtual TestResult test() override;
 
 private:
 

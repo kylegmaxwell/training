@@ -16,7 +16,7 @@ class Board {
 public:
 
     //! \brief The TileState enum represents whether a queen has been placed, or can be placed
-    enum TileState { QUEEN, ATTACKED, EMPTY };
+    enum class TileState { QUEEN, ATTACKED, EMPTY };
 
     //! Create a chess board of a given size
     Board(int size);

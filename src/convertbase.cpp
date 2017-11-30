@@ -12,25 +12,25 @@ UnitTest::TestResult ConvertBase::test()
     if (mVerbose)
         cout << "convert base" << endl;
 
-    TestResult state = PASS;
+    TestResult state = TestResult::PASS;
     string begin = "A08";
 
     string result = convertBase(16, begin, 2);
     string expectedResult = "101000001000";
     if (!stringEqual(result, expectedResult))
-        state = FAIL;
+        state = TestResult::FAIL;
 
     string result2 = convertBase(2, result, 16);
     if (!stringEqual(begin, result2))
-        state = FAIL;
+        state = TestResult::FAIL;
 
     string result3 = convertBase(16, begin, 8);
     if (!stringEqual(result3, "5010"))
-        state = FAIL;
+        state = TestResult::FAIL;
 
     string result4 = convertBase(7, "615", 13);
     if (!stringEqual(result4, "1A7"))
-        state = FAIL;
+        state = TestResult::FAIL;
 
     return state;
 }

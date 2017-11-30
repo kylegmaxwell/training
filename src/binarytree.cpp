@@ -166,27 +166,27 @@ UnitTest::TestResult BinaryTree::test()
     BinaryNodePtr treeGood = buildBalancedTree();
 
     if (!isBalanced(treeGood))
-        return FAIL;
+        return TestResult::FAIL;
 
     BinaryNodePtr treeBad = buildUnbalancedTree();
     if (isBalanced(treeBad))
-        return FAIL;
+        return TestResult::FAIL;
 
     if (!isSorted(treeGood))
-        return FAIL;
+        return TestResult::FAIL;
 
     if (isSorted(treeBad))
-        return FAIL;
+        return TestResult::FAIL;
 
     int prev = INT_MIN;
     if (!isSortedRecursive(treeGood, prev))
-        return FAIL;
+        return TestResult::FAIL;
 
     prev = INT_MIN;
     if (isSortedRecursive(treeBad, prev))
-        return FAIL;
+        return TestResult::FAIL;
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 BinaryNode::BinaryNode(int iData)
@@ -196,9 +196,5 @@ BinaryNode::BinaryNode(int iData)
 
 BinaryNode::BinaryNode(int iData, BinaryNode *iLeft, BinaryNode *iRight)
     : mData(iData), mLeft(iLeft), mRight(iRight)
-{
-}
-
-BinaryNode::~BinaryNode()
 {
 }

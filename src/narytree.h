@@ -35,7 +35,7 @@ private:
 class NaryTree : public UnitTest
 {
 public:
-    virtual TestResult test();
+    virtual TestResult test() override;
 
 private:
     TreeNode *mRootNode;

@@ -22,7 +22,7 @@ public:
      * Runs the queens problem on different board sizes and
      * checks for the right number of solutions.
      */
-    virtual TestResult test();
+    virtual TestResult test() override;
 
     /*!
      * \brief When a solution is found the board state is cached

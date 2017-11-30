@@ -21,7 +21,7 @@ public:
 
     void getMaxValue();
 
-    virtual TestResult test();
+    virtual TestResult test() override;
 
     IntVec mStack{};
     IntVec mMax{};

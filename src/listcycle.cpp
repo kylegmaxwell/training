@@ -11,14 +11,14 @@ ListCycle::CycleState ListCycle::findCycle(ListNode *n)
         if (itr == nodes.end()) // not found
             nodes[n] = n->mData;
         else
-            return CYCLE;
+            return CycleState::CYCLE;
 
         if (mVerbose)
             n->print();
 
         n = n->mNext;
     } while (n != nullptr);
-    return TERMINATES;
+    return CycleState::TERMINATES;
 }
 
 UnitTest::TestResult ListCycle::test()
@@ -28,15 +28,15 @@ UnitTest::TestResult ListCycle::test()
     ListNode *x = new ListNode('x', y);
     ListNode *w = new ListNode('w', x);
 
-    if (findCycle(w) != TERMINATES)
-        return FAIL;
+    if (findCycle(w) != CycleState::TERMINATES)
+        return TestResult::FAIL;
 
     z->mNext = x;
 
-    if (findCycle(w) != CYCLE)
-        return FAIL;
+    if (findCycle(w) != CycleState::CYCLE)
+        return TestResult::FAIL;
 
-    return PASS;
+    return TestResult::PASS;
 }
 
 ListNode::ListNode(char iData) : mData(iData), mNext(nullptr)

@@ -7,7 +7,7 @@
 class ConvertBase : public UnitTest
 {
 public:
-    virtual TestResult test();
+    virtual TestResult test() override;
 
 private:
     /*!

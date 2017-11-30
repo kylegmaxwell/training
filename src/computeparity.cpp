@@ -40,7 +40,7 @@ UnitTest::TestResult ComputeParity::test()
     for (int i = 0; i < 10; i++) {
         int parity = computeParity(i);
         if (parity != expectedResult[i])
-            return FAIL;
+            return TestResult::FAIL;
     }
-    return PASS;
+    return TestResult::PASS;
 }

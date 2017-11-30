@@ -19,5 +19,5 @@ public:
 
     void printSet(std::ostream &stream, StringList &set);
 
-    virtual TestResult test();
+    virtual TestResult test() override;
 };
