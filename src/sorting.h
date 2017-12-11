@@ -9,7 +9,7 @@ class Sorting : public UnitTest
 {
 public:
 
-    typedef std::vector<int> IntVec;
+    using IntVec = std::vector<int>;
 
     Sorting();
 
@@ -17,17 +17,14 @@ public:
 
 private:
 
-    //! swap two elements in a vector
-    void swapVec(IntVec &v, size_t L, size_t R);
-
     //! print all elements in a vector
-    void printVec(IntVec &v);
+    void printVec(IntVec &v) const;
 
     //! check if a vector is sorted increasing
-    TestResult checkVec(IntVec &v);
+    TestResult checkVec(const IntVec &v) const;
 
     //! populate a random vector
-    void randomVec(IntVec &v, size_t size);
+    void randomVec(IntVec &v, size_t size, size_t range) const;
 
     /*!
      * \brief mergeSort sort using divide and conquer
@@ -35,5 +32,5 @@ private:
      * \param L fist valid index
      * \param R last valid index
      */
-    void mergeSort(IntVec &v, size_t L, size_t R);
+    void mergeSort(IntVec &v, size_t L, size_t R) const;
 };

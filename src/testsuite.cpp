@@ -11,6 +11,7 @@ int TestSuite::test(const vector<unique_ptr<UnitTest>> &tests)
     int failures = 0;
 
     for (const auto &t : tests) {
+        Logger::DEBUG_WORD(count);
         if (t->test() == UnitTest::TestResult::FAIL) {
             Logger::DEBUG_WORD("X");
             failures++;
@@ -21,6 +22,9 @@ int TestSuite::test(const vector<unique_ptr<UnitTest>> &tests)
         count++;
     }
     Logger::ENDL();
+
+    Logger::DEBUG_WORD(tests.size() - failures);
+    Logger::DEBUG(" succeeded");
 
     stringstream ss;
     ss << failures << " failure";

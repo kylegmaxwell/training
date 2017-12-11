@@ -29,7 +29,7 @@ protected:
      * Convenience function to compare strings and return a bool
      * @returns true when equal
      */
-    static bool stringEqual(std::string a, std::string b) {
+    static auto stringEqual(std::string a, std::string b) {
         return a.compare(b) == 0;
     }
 };

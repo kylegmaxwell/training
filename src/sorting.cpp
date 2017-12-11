@@ -1,4 +1,6 @@
 #include "sorting.h"
+#include "logger.h"
+
 #include <climits>
 
 using namespace std;
@@ -10,8 +12,11 @@ Sorting::Sorting()
 
 UnitTest::TestResult Sorting::test()
 {
+    if (mVerbose)
+        Logger::DEBUG("SORT");
+
     IntVec v;
-    randomVec(v, 100000);
+    randomVec(v, 1000, 100);
 
     if (mVerbose)
         printVec(v);
@@ -27,38 +32,37 @@ UnitTest::TestResult Sorting::test()
     return TestResult::PASS;
 }
 
-void Sorting::swapVec(Sorting::IntVec &v, size_t L, size_t R)
-{
-    int tmp = v[L];
-    v[L] = v[R];
-    v[R] = tmp;
-}
-
-void Sorting::printVec(Sorting::IntVec &v)
+void Sorting::printVec(Sorting::IntVec &v) const
 {
     for (auto itr = v.begin(); itr != v.end(); itr++) {
-        cout << *itr << endl;
+        Logger::DEBUG_WORD(*itr);
+        if (itr != v.end())
+            Logger::DEBUG_WORD(", ");
     }
+    Logger::ENDL();
 }
 
-UnitTest::TestResult Sorting::checkVec(Sorting::IntVec &v)
+UnitTest::TestResult Sorting::checkVec(const Sorting::IntVec &v) const
 {
     int prev = INT_MIN;
-    for (auto itr = v.begin(); itr != v.end(); itr++) {
-        if (*itr < prev)
+    for (const auto &itr : v) {
+        auto val = itr;
+        if (val < prev) {
             return TestResult::FAIL;
+        }
+        prev = val;
     }
     return TestResult::PASS;
 }
 
-void Sorting::randomVec(Sorting::IntVec &v, size_t size)
+void Sorting::randomVec(Sorting::IntVec &v, size_t size, size_t range) const
 {
     for (size_t i = 0; i < size; i++) {
-        v.push_back(rand() % 1000);
+        v.push_back(rand() % range);
     }
 }
 
-void Sorting::mergeSort(Sorting::IntVec &v, size_t L, size_t R)
+void Sorting::mergeSort(Sorting::IntVec &v, size_t L, size_t R) const
 {
     // first base case
     if (L == R)
@@ -67,7 +71,7 @@ void Sorting::mergeSort(Sorting::IntVec &v, size_t L, size_t R)
     // second base case (makes sure M+1 <= R for code below)
     if (L + 1 == R) {
         if (v[L] > v[R]) {
-            swapVec(v, L, R);
+            swap(v[L], v[R]);
         }
         return;
     }

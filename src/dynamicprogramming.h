@@ -26,10 +26,10 @@ public:
     std::pair<size_t, size_t> getSize() const;
 
     //! Return the number of rows
-    size_t getRows() const { return mRows; }
+    auto getRows() const { return mRows; }
 
     //! Return the number of columns
-    size_t getCols() const { return mCols; }
+    auto getCols() const { return mCols; }
 
 private:
 

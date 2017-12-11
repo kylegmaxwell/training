@@ -10,7 +10,7 @@
 class Logger {
 public:
     template <typename T>
-    static void DEBUG_WORD(T in) {
+    static void DEBUG_WORD(const T &in) {
         std::stringstream ss;
         ss << in;
 #ifdef _MSC_VER
@@ -21,7 +21,7 @@ public:
     }
 
     template <typename T>
-    static void DEBUG(T in) {
+    static void DEBUG(const T &in) {
         std::stringstream ss;
         ss << in << std::endl;
         DEBUG_WORD(ss.str());
