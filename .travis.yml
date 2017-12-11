@@ -1,5 +1,5 @@
 language: cpp
-script: cmake . && make && ./training
+script: ./scripts/test.sh
 compiler: gcc
 
 dist: trusty

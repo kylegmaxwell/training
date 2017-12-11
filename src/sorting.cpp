@@ -1,5 +1,6 @@
 #include <climits>
 #include <future>
+#include <algorithm>
 
 #include "sorting.h"
 #include "logger.h"
