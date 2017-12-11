@@ -1,7 +1,8 @@
+#include <climits>
+#include <future>
+
 #include "sorting.h"
 #include "logger.h"
-
-#include <climits>
 
 using namespace std;
 
@@ -16,15 +17,25 @@ UnitTest::TestResult Sorting::test()
         Logger::DEBUG("SORT");
 
     IntVec v;
-    randomVec(v, 1000, 100);
+    randomVec(v, 1'000, 100);
 
     if (mVerbose)
         printVec(v);
 
-    mergeSort(v, 0, v.size() - 1);
+    auto t0 = chrono::steady_clock::now();
 
-    if (mVerbose)
+    //sort(v.begin(), v.end()); // fast
+    mergeSort(v, 0, v.size() - 1, 0); // medium
+    //selectionSort(v); // slow
+
+    auto t1 = chrono::steady_clock::now();
+
+    if (mVerbose) {
+        std::chrono::duration<double> fp_s = t1 - t0;
+        Logger::DEBUG(fp_s.count());
+
         printVec(v);
+    }
 
     if (checkVec(v) == TestResult::FAIL)
         return TestResult::FAIL;
@@ -32,7 +43,7 @@ UnitTest::TestResult Sorting::test()
     return TestResult::PASS;
 }
 
-void Sorting::printVec(Sorting::IntVec &v) const
+void Sorting::printVec(Sorting::IntVec &v)
 {
     for (auto itr = v.begin(); itr != v.end(); itr++) {
         Logger::DEBUG_WORD(*itr);
@@ -42,7 +53,7 @@ void Sorting::printVec(Sorting::IntVec &v) const
     Logger::ENDL();
 }
 
-UnitTest::TestResult Sorting::checkVec(const Sorting::IntVec &v) const
+UnitTest::TestResult Sorting::checkVec(const Sorting::IntVec &v)
 {
     int prev = INT_MIN;
     for (const auto &itr : v) {
@@ -55,14 +66,14 @@ UnitTest::TestResult Sorting::checkVec(const Sorting::IntVec &v) const
     return TestResult::PASS;
 }
 
-void Sorting::randomVec(Sorting::IntVec &v, size_t size, size_t range) const
+void Sorting::randomVec(Sorting::IntVec &v, size_t size, size_t range)
 {
     for (size_t i = 0; i < size; i++) {
         v.push_back(rand() % range);
     }
 }
 
-void Sorting::mergeSort(Sorting::IntVec &v, size_t L, size_t R) const
+void Sorting::mergeSort(Sorting::IntVec &v, size_t L, size_t R, size_t d)
 {
     // first base case
     if (L == R)
@@ -77,9 +88,20 @@ void Sorting::mergeSort(Sorting::IntVec &v, size_t L, size_t R) const
     }
     size_t M = L + (R - L) / 2;
 
-    mergeSort(v, L, M);
-
-    mergeSort(v, M + 1, R);
+    // Use threads for the first two tiers
+    // This should impove performance on multi threaded machines
+    // Though the improvement on my laptop is negligible
+    if (d > 1) {
+        mergeSort(v, L, M, d + 1);
+        mergeSort(v, M + 1, R, d + 1);
+    }
+    else {
+        auto policy = launch::async;
+        auto taskL = async(policy, [&v, L, M, d] {mergeSort(v, L, M, d + 1); });
+        taskL.wait();
+        auto taskR = async(policy, [&v, M, R, d] {mergeSort(v, M + 1, R, d + 1); });
+        taskR.wait();
+    }
 
     // merge
     size_t l = L;
@@ -112,5 +134,22 @@ void Sorting::mergeSort(Sorting::IntVec &v, size_t L, size_t R) const
     for (size_t i = L; i <= R; i++) {
         v[i] = merged[j];
         j++;
+    }
+}
+
+void Sorting::selectionSort(IntVec & v)
+{
+    for (size_t i = 0; i < v.size() - 1; i++) {
+        auto lowest = v[i];
+        auto idx = i;
+        for (size_t j = i + 1; j < v.size(); j++) {
+            if (v[j] < v[idx]) {
+                idx = j;
+                lowest = v[j];
+            }
+        }
+        if (idx > i) {
+            swap(v[i], v[idx]);
+        }
     }
 }
