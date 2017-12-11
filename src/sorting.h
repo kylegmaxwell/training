@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <cstdlib> // rand
+#include <functional>
 
 class Sorting : public UnitTest
 {
@@ -16,6 +17,13 @@ public:
     virtual TestResult test() override;
 
 private:
+    /*!
+    * \brief testSort Test a sorting algorithm that operates on a vector
+    * \param func The function to call on the vector to sort it
+    * \param numElements The number of elements to add to the vector
+    * \param numValues The range of values in the vector is from zero to this value
+    */
+    TestResult testSort(std::function<void(Sorting::IntVec&)> func, size_t numElements, size_t numValues);
 
     //! print all elements in a vector
     static void printVec(IntVec &v);
@@ -29,11 +37,17 @@ private:
     /*!
      * \brief mergeSort sort using divide and conquer O(n*log(n))
      * \param v vector to sort
-     * \param L fist valid index
-     * \param R last valid index
-     * \param d recursion depth
      */
-    static void mergeSort(IntVec &v, size_t L, size_t R, size_t d);
+    static void mergeSort(IntVec &v);
+
+    /*!
+    * \brief mergeSortHelper helper to sort a specific range
+    * \param v vector to sort
+    * \param L fist valid index
+    * \param R last valid index
+    * \param d recursion depth
+    */
+    static void mergeSortHelper(IntVec &v, size_t L, size_t R, size_t d);
 
     /*!
     * \brief Selection sort to use for benchmarking O(n^2)

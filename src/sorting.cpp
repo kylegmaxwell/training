@@ -13,27 +13,48 @@ Sorting::Sorting()
 
 UnitTest::TestResult Sorting::test()
 {
+    size_t numElements = 1'000;
+    size_t numValues = numElements / 10;
+
+    // performance slow - O(n^2)
+    auto t1 = testSort(selectionSort, numElements, numValues);
+
+    // performance medium (concurrent and O(n*log(n))
+    auto t2 = testSort(mergeSort, numElements, numValues);
+
+    // performance fast - use std::sort, TODO compare to quick sort
+    auto t3 = testSort([](Sorting::IntVec& v) { sort(v.begin(), v.end()); }, numElements, numValues);
+
+    // Do nothing, should fail
+    auto t4 = testSort([](Sorting::IntVec& v) {}, numElements, numValues);
+
+    if (t1 != TestResult::PASS || t2 != TestResult::PASS ||
+        t3 != TestResult::PASS || t4 != TestResult::FAIL) {
+        return TestResult::FAIL;
+    }
+    return TestResult::PASS;
+}
+
+UnitTest::TestResult Sorting::testSort(function<void(Sorting::IntVec&)> sortFunc, size_t numElements, size_t numValues)
+{
     if (mVerbose)
         Logger::DEBUG("SORT");
 
     IntVec v;
-    randomVec(v, 1'000, 100);
+    randomVec(v, numElements, numValues);
 
     if (mVerbose)
         printVec(v);
 
     auto t0 = chrono::steady_clock::now();
 
-    //sort(v.begin(), v.end()); // fast
-    mergeSort(v, 0, v.size() - 1, 0); // medium
-    //selectionSort(v); // slow
+    sortFunc(v);
 
     auto t1 = chrono::steady_clock::now();
 
     if (mVerbose) {
         std::chrono::duration<double> fp_s = t1 - t0;
         Logger::DEBUG(fp_s.count());
-
         printVec(v);
     }
 
@@ -73,7 +94,13 @@ void Sorting::randomVec(Sorting::IntVec &v, size_t size, size_t range)
     }
 }
 
-void Sorting::mergeSort(Sorting::IntVec &v, size_t L, size_t R, size_t d)
+void Sorting::mergeSort(Sorting::IntVec &v)
+{
+    // Sort the whole range with initial recusion depth of zero
+    mergeSortHelper(v, 0, v.size() - 1, 0);
+}
+
+void Sorting::mergeSortHelper(Sorting::IntVec &v, size_t L, size_t R, size_t d)
 {
     // first base case
     if (L == R)
@@ -89,17 +116,16 @@ void Sorting::mergeSort(Sorting::IntVec &v, size_t L, size_t R, size_t d)
     size_t M = L + (R - L) / 2;
 
     // Use threads for the first two tiers
-    // This should impove performance on multi threaded machines
-    // Though the improvement on my laptop is negligible
+    // This will impove performance on multi threaded machines up to about 4 cores
     if (d > 1) {
-        mergeSort(v, L, M, d + 1);
-        mergeSort(v, M + 1, R, d + 1);
+        mergeSortHelper(v, L, M, d + 1);
+        mergeSortHelper(v, M + 1, R, d + 1);
     }
     else {
         auto policy = launch::async;
-        auto taskL = async(policy, [&v, L, M, d] {mergeSort(v, L, M, d + 1); });
+        auto taskL = async(policy, [&v, L, M, d] {mergeSortHelper(v, L, M, d + 1); });
+        auto taskR = async(policy, [&v, M, R, d] {mergeSortHelper(v, M + 1, R, d + 1); });
         taskL.wait();
-        auto taskR = async(policy, [&v, M, R, d] {mergeSort(v, M + 1, R, d + 1); });
         taskR.wait();
     }
 
