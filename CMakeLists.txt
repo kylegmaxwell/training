@@ -20,3 +20,6 @@ file(GLOB SOURCE_FILES
 )
 
 add_executable(training main.cpp ${SOURCE_FILES})
+
+find_package (Threads)
+target_link_libraries (training ${CMAKE_THREAD_LIBS_INIT})
